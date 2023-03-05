@@ -1,3 +1,3 @@
-# fastforwardkt
+# libredirectkt
 
-(Unfinished) Kotlin implementation of [FastForward](https://github.com/FastForwardTeam/FastForward)'s rule bypasses
+(Unfinished) Kotlin implementation of [LibRedirect](https://github.com/libredirect/libredirect)
