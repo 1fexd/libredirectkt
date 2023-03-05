@@ -379,49 +379,57 @@ enum class RedirectFrontend(vararg val keys: String) {
     }
 }
 
-private val defaultInstances = mapOf(
-    "invidious" to listOf("https://inv.vern.cc"),
-    "piped" to listOf("https://pipedapi-libre.kavin.rocks"),
-    "pipedMaterial" to listOf("https://piped-material.xn--17b.net"),
-    "cloudtube" to listOf("https://tube.cadence.moe"),
-    "poketube" to listOf("https://poketube.fun"),
-    "proxiTok" to listOf("https://proxitok.pabloferreiro.es"),
-    "send" to listOf("https://send.vis.ee"),
-    "nitter" to listOf("https://nitter.net"),
-    "libreddit" to listOf("https://libreddit.spike.codes"),
-    "teddit" to listOf("https://teddit.net"),
-    "scribe" to listOf("https://scribe.rip"),
-    "libMedium" to listOf("https://md.vern.cc"),
-    "quetre" to listOf("https://quetre.iket.me"),
-    "libremdb" to listOf("https://libremdb.iket.me"),
-    "simplyTranslate" to listOf("https://simplytranslate.org"),
-    "lingva" to listOf("https://lingva.ml"),
-    "searxng" to listOf("https://sx.vern.cc"),
-    "rimgo" to listOf("https://rimgo.vern.cc"),
-    "librarian" to listOf("https://lbry.vern.cc"),
-    "beatbump" to listOf("https://beatbump.ml"),
-    "hyperpipe" to listOf("https://hyperpipe.surge.sh"),
-    "facil" to listOf(" https://facilmap.org "),
-    "osm" to listOf("https://www.openstreetmap.org"),
-    "breezeWiki" to listOf("https://breezewiki.com"),
-    "neuters" to listOf("https://neuters.de"),
-    "dumb" to listOf("https://dm.vern.cc"),
-    "ruralDictionary" to listOf("https://rd.vern.cc"),
-    "anonymousOverflow" to listOf("https://code.whatever.social"),
-    "biblioReads" to listOf("https://biblioreads.ml"),
-    "wikiless" to listOf("https://wikiless.org"),
-    "suds" to listOf("https://sd.vern.cc"),
-    "waybackClassic" to listOf("https://wayback-classic.net"),
-    "gothub" to listOf("https://gh.odyssey346.dev"),
-    "mikuIndividious" to listOf("https://mikuinv.resrv.org"),
-    "tent" to listOf("https://tent.sny.sh"),
-    "wolfreeAlpha" to listOf("https://gqq.gitlab.io", "https://uqq.gitlab.io")
-)
+object LibRedirect {
+    private val defaultInstances = mapOf(
+        "invidious" to listOf("https://inv.vern.cc"),
+        "piped" to listOf("https://pipedapi-libre.kavin.rocks"),
+        "pipedMaterial" to listOf("https://piped-material.xn--17b.net"),
+        "cloudtube" to listOf("https://tube.cadence.moe"),
+        "poketube" to listOf("https://poketube.fun"),
+        "proxiTok" to listOf("https://proxitok.pabloferreiro.es"),
+        "send" to listOf("https://send.vis.ee"),
+        "nitter" to listOf("https://nitter.net"),
+        "libreddit" to listOf("https://libreddit.spike.codes"),
+        "teddit" to listOf("https://teddit.net"),
+        "scribe" to listOf("https://scribe.rip"),
+        "libMedium" to listOf("https://md.vern.cc"),
+        "quetre" to listOf("https://quetre.iket.me"),
+        "libremdb" to listOf("https://libremdb.iket.me"),
+        "simplyTranslate" to listOf("https://simplytranslate.org"),
+        "lingva" to listOf("https://lingva.ml"),
+        "searxng" to listOf("https://sx.vern.cc"),
+        "rimgo" to listOf("https://rimgo.vern.cc"),
+        "librarian" to listOf("https://lbry.vern.cc"),
+        "beatbump" to listOf("https://beatbump.ml"),
+        "hyperpipe" to listOf("https://hyperpipe.surge.sh"),
+        "facil" to listOf(" https://facilmap.org "),
+        "osm" to listOf("https://www.openstreetmap.org"),
+        "breezeWiki" to listOf("https://breezewiki.com"),
+        "neuters" to listOf("https://neuters.de"),
+        "dumb" to listOf("https://dm.vern.cc"),
+        "ruralDictionary" to listOf("https://rd.vern.cc"),
+        "anonymousOverflow" to listOf("https://code.whatever.social"),
+        "biblioReads" to listOf("https://biblioreads.ml"),
+        "wikiless" to listOf("https://wikiless.org"),
+        "suds" to listOf("https://sd.vern.cc"),
+        "waybackClassic" to listOf("https://wayback-classic.net"),
+        "gothub" to listOf("https://gh.odyssey346.dev"),
+        "mikuIndividious" to listOf("https://mikuinv.resrv.org"),
+        "tent" to listOf("https://tent.sny.sh"),
+        "wolfreeAlpha" to listOf("https://gqq.gitlab.io", "https://uqq.gitlab.io")
+    )
 
-fun redirect(url: String, frontendKey: String, instance: String): String? {
-    return RedirectFrontend.findFrontendByKey(frontendKey)?.redirect(URI(url), instance)
-}
+    fun redirect(url: String, frontendKey: String, instance: String): String? {
+        return RedirectFrontend.findFrontendByKey(frontendKey)?.redirect(URI(url), instance)
+    }
 
-fun getDefaultInstanceForFrontend(frontendKey: String): List<String>? {
-    return defaultInstances[frontendKey]
+    fun findServiceForUrl(url: String, services: List<LibRedirectService>): LibRedirectService? {
+        return services.find { service ->
+            service.targets.any { target -> target.containsMatchIn(url) }
+        }
+    }
+
+    fun getDefaultInstanceForFrontend(frontendKey: String): List<String>? {
+        return defaultInstances[frontendKey]
+    }
 }
