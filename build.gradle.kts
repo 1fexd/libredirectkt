@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    api("com.gitlab.grrfe:GSONKtExtensions:2.2.0")
+    api("com.gitlab.grrfe:GSONKtExtensions:2.4.0")
     api("com.google.code.gson:gson:2.10.1")
     testImplementation(kotlin("test"))
 }

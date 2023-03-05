@@ -1,12 +1,9 @@
 package fe.libredirectkt
 
 import com.google.gson.JsonElement
-import fe.gson.extensions.array
-import fe.gson.extensions.keys
-import fe.gson.extensions.obj
-import fe.gson.extensions.string
+import fe.gson.extensions.*
 
-data class Service(val name: String, val url: String, val frontends: List<Frontend>, val targets: List<String>)
+data class Service(val name: String, val url: String, val frontends: List<Frontend>, val targets: List<Regex>)
 
 data class Frontend(
     val name: String,
@@ -31,6 +28,6 @@ fun loadLibRedirectServices(elem: JsonElement): List<Service> {
             key,
             service.string("url")!!,
             frontends,
-            service.array("targets").map { it.asJsonPrimitive.asString })
+            service.array("targets").map { Regex(it.asString()) })
     }
 }
