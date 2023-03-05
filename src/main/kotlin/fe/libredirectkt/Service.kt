@@ -1,8 +1,6 @@
 package fe.libredirectkt
 
-import com.google.gson.Gson
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 import fe.gson.extensions.array
 import fe.gson.extensions.keys
 import fe.gson.extensions.obj
