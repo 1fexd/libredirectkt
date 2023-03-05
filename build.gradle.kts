@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "fe.libredirectkt"
-version = versioning.info.tag ?: versioning.info.full
+version = versioning.info.tag ?: versioning.info.full ?: "0.0.0"
 
 repositories {
     mavenCentral()
@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    api("com.gitlab.grrfe:GSONKtExtensions:2.1.2")
+    api("com.gitlab.grrfe:GSONKtExtensions:2.2.0")
     api("com.google.code.gson:gson:2.10.1")
     testImplementation(kotlin("test"))
 }
