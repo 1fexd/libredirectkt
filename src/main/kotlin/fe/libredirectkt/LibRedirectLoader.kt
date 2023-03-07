@@ -26,12 +26,14 @@ object LibRedirectLoader {
             val frontends = service.obj("frontends").keys(map = { it.asJsonObject }).map { (frontendKey, frontendObj) ->
                 LibRedirectFrontend(
                     frontendKey,
+                    frontendObj.string("name")!!,
                     frontendObj.array("excludeTargets")?.map { it.asJsonPrimitive.asString } ?: listOf(),
                     frontendObj.string("url")!!)
             }
 
             LibRedirectService(
                 key,
+                service.string("name")!!,
                 service.string("url")!!,
                 frontends,
                 frontends.find { it.name == service.obj("options").string("frontend") } ?: frontends.first(),

@@ -12,18 +12,18 @@ class MainTest {
         val ytService = LibRedirect.findServiceForUrl("https://www.youtube.com/watch?v=V3zLnSGVdmE", services)
         assertNotNull(ytService)
         assertNotNull(ytService.defaultFrontend)
-        assertEquals("youtube", ytService.name)
-        assertEquals("invidious", ytService.defaultFrontend.name)
+        assertEquals("youtube", ytService.key)
+        assertEquals("invidious", ytService.defaultFrontend.key)
         assertEquals(
             "https://inv.vern.cc",
-            LibRedirect.getDefaultInstanceForFrontend(ytService.defaultFrontend.name)?.firstOrNull()
+            LibRedirect.getDefaultInstanceForFrontend(ytService.defaultFrontend.key)?.firstOrNull()
         )
 
         assertEquals(
             "https://inv.vern.cc/watch?v=V3zLnSGVdmE", LibRedirect.redirect(
                 "https://www.youtube.com/watch?v=V3zLnSGVdmE",
-                ytService.defaultFrontend.name,
-                LibRedirect.getDefaultInstanceForFrontend(ytService.defaultFrontend.name)?.first()!!
+                ytService.defaultFrontend.key,
+                LibRedirect.getDefaultInstanceForFrontend(ytService.defaultFrontend.key)?.first()!!
             )
         )
     }
