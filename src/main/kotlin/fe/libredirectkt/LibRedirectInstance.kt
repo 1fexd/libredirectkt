@@ -1,4 +1,4 @@
 package fe.libredirectkt
 
-data class LibRedirectInstance(val name: String, val hosts: List<String>)
+data class LibRedirectInstance(val frontendKey: String, val hosts: List<String>)
 

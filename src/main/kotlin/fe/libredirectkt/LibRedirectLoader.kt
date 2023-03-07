@@ -14,7 +14,7 @@ object LibRedirectLoader {
 
     fun loadLibRedirectInstances(obj: JsonElement): List<LibRedirectInstance> {
         return obj.asJsonObject.keys(map = { it.asJsonObject }).map { (key, instanceObj) ->
-            LibRedirectInstance(key, instanceObj.array("clearnet").map { it.asJsonPrimitive.asString })
+            LibRedirectInstance(key, instanceObj.array("clearnet").map { it.asString() })
         }
     }
 
