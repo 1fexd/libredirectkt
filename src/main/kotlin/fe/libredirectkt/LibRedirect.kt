@@ -1,20 +1,9 @@
 package fe.libredirectkt
 
-import java.net.URI
 import java.net.URL
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
-
-fun String.querySplit(): MutableMap<String, String> {
-    return this.split("&").mapNotNull {
-        with(it.split("=")) {
-            if (this.size == 2) {
-                this[0] to this[1]
-            } else null
-        }
-    }.toMap().toMutableMap()
-}
 
 fun Map<String, String?>.makeQuery(): String {
     return this.map {
@@ -30,14 +19,16 @@ private val mapCentreRegex = Regex("@(-?\\d[0-9.]*),(-?\\d[0-9.]*),(\\d{1,2})[.z
 private val dataLatLngRegex = Regex("!3d(-?[0-9]{1,}.[0-9]{1,})!4d(-?[0-9]{1,}.[0-9]{1,})")
 private val placeRegex = Regex("\\/place\\/(.*)\\/")
 
-private fun convertMapCentre(url: URL): Triple<String, String, String>? {
-    mapCentreRegex.matchEntire(url.path)?.groupValues?.let {
-        val (_, lat, lon, zoom) = it
-        return Triple(lat, lon, zoom)
+private fun convertMapCentre(url: UriKt): Triple<String, String, String>? {
+    url.path?.let {
+        mapCentreRegex.matchEntire(it)?.groupValues?.let {
+            val (_, lat, lon, zoom) = it
+            return Triple(lat, lon, zoom)
+        }
     }
 
-    val query = url.query?.querySplit()
-    if (query?.contains("center") == true) {
+    val query = url.splitQuery
+    if (query.contains("center")) {
         query["center"]?.split(",")?.let {
             return Triple(it[0], it[1], query["zoom"] ?: "17")
         }
@@ -48,7 +39,7 @@ private fun convertMapCentre(url: URL): Triple<String, String, String>? {
 
 enum class RedirectFrontend(vararg val keys: String) {
     Beatbump("beatbump") {
-        override fun redirect(uri: URI, instanceHost: String): String {
+        override fun redirect(uri: UriKt, instanceHost: String): String {
             return "$instanceHost${uri.path}?${uri.query}"
                 .replace("/watch?v=", "/listen?id=")
                 .replace("/channel/", "/artist/")
@@ -62,7 +53,7 @@ enum class RedirectFrontend(vararg val keys: String) {
         }
     },
     Hyperpipe("hyperpipe") {
-        override fun redirect(uri: URI, instanceHost: String): String {
+        override fun redirect(uri: UriKt, instanceHost: String): String {
             return "$instanceHost${uri.path}?${uri.query}".replace(Regex("\\/search\\?q=.*")) { result ->
                 result.groupValues[0].replace(
                     "?q=",
@@ -74,33 +65,33 @@ enum class RedirectFrontend(vararg val keys: String) {
 
     //    LbryDesktop("lbryDesktop")
     Searx("searx", "searxng") {
-        override fun redirect(uri: URI, instanceHost: String): String {
+        override fun redirect(uri: UriKt, instanceHost: String): String {
             return "$instanceHost/?${uri.query}"
         }
     },
     Whoogle("whoogle") {
-        override fun redirect(uri: URI, instanceHost: String): String {
+        override fun redirect(uri: UriKt, instanceHost: String): String {
             return "$instanceHost/search?${uri.query}"
         }
 
     },
     Librex("librex") {
-        override fun redirect(uri: URI, instanceHost: String): String {
+        override fun redirect(uri: UriKt, instanceHost: String): String {
             return "${instanceHost}/search.php?${uri.query}"
         }
     },
 
     //    Send("send")
     Nitter("nitter") {
-        override fun redirect(uri: URI, instanceHost: String): String {
-            val query = uri.query.querySplit()
+        override fun redirect(uri: UriKt, instanceHost: String): String {
+            val query = uri.splitQuery
             query.remove("ref_src")
             query.remove("ref_url")
 
             var search = query.makeQuery()
             if (query.isNotEmpty()) search = "?$search"
 
-            if (uri.host.split(".")[0] === "pbs" || uri.host.split(".")[0] === "video") {
+            if (uri.host?.split(".")?.get(0) === "pbs" || uri.host?.split(".")?.get(0) === "video") {
                 Regex("(.*)\\?format=(.*)&(.*)").matchEntire(search)?.groupValues?.let { result ->
                     val (_, id, format, extra) = result
                     return "$instanceHost/pic${uri.path}?${query}"
@@ -109,8 +100,8 @@ enum class RedirectFrontend(vararg val keys: String) {
                 return "$instanceHost/pic/${uri.path}$search"
             }
 
-            if (uri.path.split("/").contains("tweets")) {
-                return "$instanceHost${uri.path.replace("/tweets", "")}$search"
+            if (uri.path?.split("/")?.contains("tweets") == true) {
+                return "$instanceHost${uri.path?.replace("/tweets", "")}$search"
             }
 
             if (uri.host == "t.co") {
@@ -124,20 +115,20 @@ enum class RedirectFrontend(vararg val keys: String) {
     //    Yattee("yattee"),
 //    Freetube("freetube"),
     Invidious("invidious", "piped", "pipedMaterial", "cloudtube") {
-        override fun redirect(uri: URI, instanceHost: String): String? {
-            if (uri.path.startsWith("/live_chat")) {
+        override fun redirect(uri: UriKt, instanceHost: String): String? {
+            if (uri.path?.startsWith("/live_chat") == true) {
                 return null
             }
             return "$instanceHost${uri.path}?${uri.query}";
         }
     },
     Poketube("poketube") {
-        override fun redirect(uri: URI, instanceHost: String): String? {
-            if (uri.path.startsWith("/live_chat")) {
+        override fun redirect(uri: UriKt, instanceHost: String): String? {
+            if (uri.path?.startsWith("/live_chat") == true) {
                 return null
             }
-            if (uri.path.startsWith("/channel")) {
-                val match = Regex("\\/channel\\/(.*)\\/?\$").find(uri.path)
+            if (uri.path?.startsWith("/channel") == true) {
+                val match = Regex("\\/channel\\/(.*)\\/?\$").find(uri.path!!)
 
                 if (match != null) {
                     val id = match.groupValues[1]
@@ -145,7 +136,7 @@ enum class RedirectFrontend(vararg val keys: String) {
                 }
             }
 
-            if (Regex("\\/@[a-z]+\\/").containsMatchIn(uri.path)) {
+            if (uri.path?.let { Regex("\\/@[a-z]+\\/").containsMatchIn(it) } == true) {
                 return instanceHost
             }
 
@@ -153,12 +144,12 @@ enum class RedirectFrontend(vararg val keys: String) {
         }
     },
     SimplyTranslate("simplyTranslate") {
-        override fun redirect(uri: URI, instanceHost: String): String {
+        override fun redirect(uri: UriKt, instanceHost: String): String {
             return "$instanceHost/?${uri.query}"
         }
     },
     LibreTranslate("libreTranslate") {
-        override fun redirect(uri: URI, instanceHost: String): String {
+        override fun redirect(uri: UriKt, instanceHost: String): String {
             return "$instanceHost/?${uri.query}"
                 .replace(Regex("(?<=\\/?)sl"), "source")
                 .replace(Regex("(?<=&)tl"), "target")
@@ -167,18 +158,18 @@ enum class RedirectFrontend(vararg val keys: String) {
 
     },
     OSM("osm") {
-        override fun redirect(uri: URI, instanceHost: String): String? {
+        override fun redirect(uri: UriKt, instanceHost: String): String? {
             return null
         }
     },
     Facil("facil") {
-        override fun redirect(uri: URI, instanceHost: String): String? {
+        override fun redirect(uri: UriKt, instanceHost: String): String? {
             return null
         }
     },
     LingVa("lingva") {
-        override fun redirect(uri: URI, instanceHost: String): String {
-            val params = uri.query.querySplit()
+        override fun redirect(uri: UriKt, instanceHost: String): String {
+            val params = uri.splitQuery
             if (params.containsKey("sl") && params.containsKey("tl") && params.containsKey("text"))
                 return "${instanceHost}/${params["sl"]}/${params["tl"]}/${params["text"]}"
 
@@ -186,12 +177,12 @@ enum class RedirectFrontend(vararg val keys: String) {
         }
     },
     BreezeWiki("breezeWiki") {
-        override fun redirect(uri: URI, instanceHost: String): String? {
+        override fun redirect(uri: UriKt, instanceHost: String): String? {
             return null
         }
     },
     Rimgo("rimgo") {
-        override fun redirect(uri: URI, instanceHost: String): String? {
+        override fun redirect(uri: UriKt, instanceHost: String): String? {
             if (Regex("^https?:\\/{2}(?:[im]\\.)?stack\\.").containsMatchIn(uri.toString())) {
                 return "$instanceHost/stack${uri.path}?${uri.query}"
             }
@@ -200,8 +191,8 @@ enum class RedirectFrontend(vararg val keys: String) {
         }
     },
     LibReddit("libreddit") {
-        override fun redirect(uri: URI, instanceHost: String): String? {
-            val result = Regex("^(?:(?:external-)?preview|i)(?=\\.redd\\.it)").find(uri.host)
+        override fun redirect(uri: UriKt, instanceHost: String): String? {
+            val result = uri.host?.let { Regex("^(?:(?:external-)?preview|i)(?=\\.redd\\.it)").find(it) }
                 ?: return "$instanceHost${uri.path}?${uri.query}"
 
             return when (result.groupValues[1]) {
@@ -213,9 +204,9 @@ enum class RedirectFrontend(vararg val keys: String) {
         }
     },
     Teddit("teddit") {
-        override fun redirect(uri: URI, instanceHost: String): String? {
-            if (Regex("^(?:(?:external-)?preview|i)\\.redd\\.it").containsMatchIn(uri.host)) {
-                if (uri.query == "") {
+        override fun redirect(uri: UriKt, instanceHost: String): String? {
+            if (uri.host?.let { Regex("^(?:(?:external-)?preview|i)\\.redd\\.it").containsMatchIn(it) } == true) {
+                if (uri.query == null) {
                     return "$instanceHost${uri.path}?teddit_proxy=${uri.host}"
                 }
 
@@ -226,10 +217,12 @@ enum class RedirectFrontend(vararg val keys: String) {
         }
     },
     Neuters("neuters") {
-        override fun redirect(uri: URI, instanceHost: String): String? {
-            if (uri.path.startsWith("/article/") || uri.path.startsWith("/pf/") || uri.path.startsWith("/arc/") || uri.path.startsWith(
+        override fun redirect(uri: UriKt, instanceHost: String): String? {
+            if (uri.path?.startsWith("/article/") == true || uri.path?.startsWith("/pf/") == true || uri.path?.startsWith(
+                    "/arc/"
+                ) == true || uri.path?.startsWith(
                     "/resizer/"
-                )
+                ) == true
             ) {
                 return null
             }
@@ -238,8 +231,8 @@ enum class RedirectFrontend(vararg val keys: String) {
         }
     },
     Dumb("dumb") {
-        override fun redirect(uri: URI, instanceHost: String): String? {
-            if (uri.path.endsWith("-lyrics")) {
+        override fun redirect(uri: UriKt, instanceHost: String): String? {
+            if (uri.path?.endsWith("-lyrics") == true) {
                 return "${instanceHost}${uri.path}"
             }
 
@@ -247,31 +240,31 @@ enum class RedirectFrontend(vararg val keys: String) {
         }
     },
     RuralDictionary("ruralDictionary") {
-        override fun redirect(uri: URI, instanceHost: String): String? {
-            if (!uri.path.contains("/define.php") && !uri.path.contains("/random.php") && uri.path != "/") return null
+        override fun redirect(uri: UriKt, instanceHost: String): String? {
+            if (uri.path?.contains("/define.php") == false && uri.path?.contains("/random.php") == false && uri.path != "/") return null
             return "${instanceHost}${uri.path}?${uri.query}"
         }
     },
     AnonymousOverflow("anonymousOverflow") {
-        override fun redirect(uri: URI, instanceHost: String): String? {
-            if (!uri.path.startsWith("/questions") && uri.path != "/") return null
-            val threadID = Regex("\\/(\\d+)\\/?\$").find(uri.path)?.groupValues
+        override fun redirect(uri: UriKt, instanceHost: String): String? {
+            if (uri.path?.startsWith("/questions") == false && uri.path != "/") return null
+            val threadID = Regex("\\/(\\d+)\\/?\$").find(uri.path!!)?.groupValues
             if (threadID != null) return "${instanceHost}/questions/${threadID[1]}?${uri.query}"
             return "${instanceHost}${uri.path}?${uri.query}"
         }
     },
     BiblioReads("biblioReads") {
-        override fun redirect(uri: URI, instanceHost: String): String? {
-            if (!uri.path.startsWith("/book/show/") && uri.path != "/") return null
+        override fun redirect(uri: UriKt, instanceHost: String): String? {
+            if (uri.path?.startsWith("/book/show/") == false && uri.path != "/") return null
             return "${instanceHost}${uri.path}?${uri.query}"
         }
     },
     WikiLess("wikiless") {
-        override fun redirect(uri: URI, instanceHost: String): String? {
-            val queries = uri.query?.querySplit() ?: mutableMapOf()
+        override fun redirect(uri: UriKt, instanceHost: String): String? {
+            val queries = uri.splitQuery
 
             val link = "$instanceHost${uri.path}"
-            val urlSplit = uri.host.split(".")
+            val urlSplit = uri.host?.split(".") ?: listOf()
             if (urlSplit[0] != "wikipedia" && urlSplit[0] != "www") {
                 if (urlSplit[0] == "m") {
                     queries["mobileaction"] = "toggle_view_mobile"
@@ -286,14 +279,14 @@ enum class RedirectFrontend(vararg val keys: String) {
         }
     },
     ProxiTok("proxiTok") {
-        override fun redirect(uri: URI, instanceHost: String): String? {
-            if (uri.path.startsWith("/email")) return null
+        override fun redirect(uri: UriKt, instanceHost: String): String? {
+            if (uri.path?.startsWith("/email") == true) return null
             return "$instanceHost${uri.path}?${uri.query}"
         }
     },
     WayBackClassic("waybackClassic") {
-        override fun redirect(uri: URI, instanceHost: String): String? {
-            val result = Regex("^\\/\\web\\/[0-9]+\\*\\/(.*)").find(uri.path)?.groupValues
+        override fun redirect(uri: UriKt, instanceHost: String): String? {
+            val result = uri.path?.let { Regex("^\\/\\web\\/[0-9]+\\*\\/(.*)").find(it)?.groupValues }
             if (result != null) {
                 val link = result[1]
                 return "${instanceHost}/cgi-bin/history.cgi?utf8=✓&q=${URLEncoder.encode(link, StandardCharsets.UTF_8)}"
@@ -303,8 +296,8 @@ enum class RedirectFrontend(vararg val keys: String) {
         }
     },
     Gothub("gothub") {
-        override fun redirect(uri: URI, instanceHost: String): String? {
-            val regex = Regex("^\\/(.*)\\/(.*)\\/(?:blob|tree)\\/(.*)\\/(.*)").find(uri.path)?.groupValues
+        override fun redirect(uri: UriKt, instanceHost: String): String? {
+            val regex = uri.path?.let { Regex("^\\/(.*)\\/(.*)\\/(?:blob|tree)\\/(.*)\\/(.*)").find(it)?.groupValues }
             if (regex != null) {
                 val user = regex[1]
                 val repo = regex[2]
@@ -316,7 +309,7 @@ enum class RedirectFrontend(vararg val keys: String) {
         }
     },
     MikuIndividious("mikuIndividious") {
-        override fun redirect(uri: URI, instanceHost: String): String? {
+        override fun redirect(uri: UriKt, instanceHost: String): String? {
             if (uri.host == "bilibili.com" || uri.host == "www.bilibili.com" || uri.host == "b23.tv") {
                 return "${instanceHost}${uri.path}?${uri.query}"
             }
@@ -328,18 +321,18 @@ enum class RedirectFrontend(vararg val keys: String) {
         }
     },
     Tent("tent") {
-        override fun redirect(uri: URI, instanceHost: String): String? {
+        override fun redirect(uri: UriKt, instanceHost: String): String? {
             if (uri.host == "bandcamp.com" && uri.path == "/search") {
-                val query = uri.query.querySplit()["q"]
+                val query = uri.splitQuery["q"]
                 return "${instanceHost}/search.php?query=${URLEncoder.encode(query, StandardCharsets.UTF_8)}"
             }
-            if (uri.host.endsWith("bandcamp.com")) {
-                val regex = Regex("^(.*)\\.bandcamp\\.com").find(uri.host)?.groupValues ?: return null
+            if (uri.host?.endsWith("bandcamp.com") == true) {
+                val regex = uri.host?.let { Regex("^(.*)\\.bandcamp\\.com").find(it)?.groupValues } ?: return null
                 val artist = regex[1]
                 if (uri.path == "/") {
                     return "${instanceHost}/artist.php?name=${artist}"
                 } else {
-                    val regex = Regex("^\\/(.*)\\/(.*)").find(uri.path)?.groupValues
+                    val regex = uri.path?.let { Regex("^\\/(.*)\\/(.*)").find(it)?.groupValues }
                     if (regex != null) {
                         val type = regex[1]
                         val name = regex[2]
@@ -348,17 +341,17 @@ enum class RedirectFrontend(vararg val keys: String) {
                 }
             }
             if (uri.host == "f4.bcbits.com") {
-                val regex = Regex("\\/img\\/(.*)").find(uri.path)?.groupValues ?: return null
+                val regex = uri.path?.let { Regex("\\/img\\/(.*)").find(it)?.groupValues } ?: return null
                 val image = regex[1]
                 return "${instanceHost}/image.php?file=${image}"
             }
             if (uri.host == "t4.bcbits.com") {
-                val regex = Regex("\\/stream\\/(.*)\\/(.*)\\/(.*)").find(uri.path)?.groupValues
+                val regex = uri.path?.let { Regex("\\/stream\\/(.*)\\/(.*)\\/(.*)").find(it)?.groupValues }
                 if (regex != null) {
                     val directory = regex[1]
                     val format = regex[2]
                     val file = regex[3]
-                    val token = uri.query.querySplit()["token"]
+                    val token = uri.splitQuery["token"]
                     return "${instanceHost}/audio.php/?directory=${directory}&format=${format}&file=${file}&token=${
                         URLEncoder.encode(
                             token,
@@ -372,7 +365,7 @@ enum class RedirectFrontend(vararg val keys: String) {
         }
     };
 
-    abstract fun redirect(uri: URI, instanceHost: String): String?
+    abstract fun redirect(uri: UriKt, instanceHost: String): String?
 
     companion object {
         fun findFrontendByKey(key: String) = RedirectFrontend.values().find { it.keys.contains(key) }
@@ -420,7 +413,7 @@ object LibRedirect {
     )
 
     fun redirect(url: String, frontendKey: String, instance: String): String? {
-        return RedirectFrontend.findFrontendByKey(frontendKey)?.redirect(URI(url), instance)
+        return RedirectFrontend.findFrontendByKey(frontendKey)?.redirect(UriKt(url), instance)
     }
 
     fun findServiceForUrl(url: String, services: List<LibRedirectService>): LibRedirectService? {

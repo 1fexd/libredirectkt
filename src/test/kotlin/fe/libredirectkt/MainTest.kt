@@ -26,5 +26,19 @@ class MainTest {
                 LibRedirect.getDefaultInstanceForFrontend(ytService.defaultFrontend.key)?.first()!!
             )
         )
+
+        val twitterService = LibRedirect.findServiceForUrl("https://twitter.com/MishaalRahman/status/1633529635253174274", services)
+        assertNotNull(twitterService)
+        assertNotNull(twitterService.defaultFrontend)
+        assertEquals("twitter", twitterService.key)
+        assertEquals("nitter", twitterService.defaultFrontend.key)
+        assertEquals("https://nitter.net", LibRedirect.getDefaultInstanceForFrontend(twitterService.defaultFrontend.key)?.firstOrNull())
+        assertEquals(
+            "https://nitter.net/MishaalRahman/status/1633529635253174274#m", LibRedirect.redirect(
+                "https://twitter.com/MishaalRahman/status/1633529635253174274",
+                twitterService.defaultFrontend.key,
+                LibRedirect.getDefaultInstanceForFrontend(twitterService.defaultFrontend.key)?.first()!!
+            )
+        )
     }
 }
