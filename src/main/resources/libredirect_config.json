@@ -236,7 +236,7 @@
 				}
 			},
 			"targets": [
-				"^https:\\/{2}(link\\.|cdn\\-images\\-\\d+\\.)?medium\\.com",
+				"^https:\\/{2}(.*\\.)?medium\\.com",
 				"^https?:\\/{2}towardsdatascience\\.com(\\/|$)",
 				"^https?:\\/{2}uxdesign\\.cc(\\/|$)",
 				"^https?:\\/{2}uxplanet\\.org(\\/|$)",
@@ -562,7 +562,8 @@
 				}
 			},
 			"targets": [
-				"^https?:\\/{2}stackoverflow\\.com\\/"
+				"^https?:\\/{2}?stackoverflow\\.com\\/",
+				"^https?:\\/{2}([a-zA-Z0-9-]+\\.)?stackexchange\\.com\\/"
 			],
 			"name": "Stack Overflow",
 			"options": {

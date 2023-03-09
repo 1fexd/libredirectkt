@@ -145,6 +145,19 @@ enum class RedirectFrontend(vararg val keys: String) {
             return "$instanceHost${uri.path}?${uri.query}"
         }
     },
+    Scribe("scribe") {
+        override fun redirect(uri: UriKt, instanceHost: String): String? {
+            val result = uri.host?.let { Regex("^(link|cdn-images-\\d+|.*)\\.medium\\.com").find(it)?.groupValues }
+            if(result != null && result.size > 2){
+                val subdomain = result[1]
+                if (subdomain != "link" || !subdomain.startsWith("cdn-images")) {
+                    return "${instanceHost}/@${subdomain}${uri.path}?${uri.query}"
+                }
+            }
+
+            return "${instanceHost}${uri.path}?${uri.query}"
+        }
+    },
     SimplyTranslate("simplyTranslate") {
         override fun redirect(uri: UriKt, instanceHost: String): String {
             return "$instanceHost/?${uri.query}"
