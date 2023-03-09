@@ -87,6 +87,8 @@ enum class RedirectFrontend(vararg val keys: String) {
             val query = uri.splitQuery
             query.remove("ref_src")
             query.remove("ref_url")
+            query.remove("t")
+            query.remove("s")
 
             var search = query.makeQuery()
             if (query.isNotEmpty()) search = "?$search"
