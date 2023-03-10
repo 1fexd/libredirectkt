@@ -8,6 +8,7 @@ class MainTest {
     @Test
     fun testLibRedirect() {
         val services = LibRedirectLoader.loadBuiltInServices()
+        val instances = LibRedirectLoader.loadBuiltInInstances()
 
         val ytService = LibRedirect.findServiceForUrl("https://www.youtube.com/watch?v=V3zLnSGVdmE", services)
         assertNotNull(ytService)
@@ -27,12 +28,16 @@ class MainTest {
             )
         )
 
-        val twitterService = LibRedirect.findServiceForUrl("https://twitter.com/MishaalRahman/status/1633529635253174274", services)
+        val twitterService =
+            LibRedirect.findServiceForUrl("https://twitter.com/MishaalRahman/status/1633529635253174274", services)
         assertNotNull(twitterService)
         assertNotNull(twitterService.defaultFrontend)
         assertEquals("twitter", twitterService.key)
         assertEquals("nitter", twitterService.defaultFrontend.key)
-        assertEquals("https://nitter.net", LibRedirect.getDefaultInstanceForFrontend(twitterService.defaultFrontend.key)?.firstOrNull())
+        assertEquals(
+            "https://nitter.net",
+            LibRedirect.getDefaultInstanceForFrontend(twitterService.defaultFrontend.key)?.firstOrNull()
+        )
         assertEquals(
             "https://nitter.net/MishaalRahman/status/1633529635253174274#m", LibRedirect.redirect(
                 "https://twitter.com/MishaalRahman/status/1633529635253174274",
@@ -40,5 +45,39 @@ class MainTest {
                 LibRedirect.getDefaultInstanceForFrontend(twitterService.defaultFrontend.key)?.first()!!
             )
         )
+
+        val googleMapsUrl =
+            "https://www.google.com/maps/place/41%C2%B001'58.2%22N+40%C2%B029'18.2%22E/@41.032833,40.4862063,17z/data=!3m1!4b1!4m6!3m5!1s0x0:0xf64286eaf72fc49d!7e2!8m2!3d41.0328329!4d40.4883948"
+        val osmService = LibRedirect.findServiceForUrl(googleMapsUrl, services)
+        assertNotNull(osmService)
+        assertNotNull(osmService.defaultFrontend)
+        assertEquals("maps", osmService.key)
+        val osmFrontend = osmService.frontends.find { it.key == "osm" }
+        assertNotNull(osmFrontend?.key)
+        assertEquals("osm", osmFrontend!!.key)
+        val instance = instances.find { it.frontendKey == "osm" }
+        assertNotNull(instance)
+        val host = instance.hosts.find { it == "https://www.openstreetmap.org" }
+        assertNotNull(host)
+        assertEquals(
+            "https://www.openstreetmap.org/search?query=41.0328329%2C40.4883948",
+            LibRedirect.redirect(googleMapsUrl, osmFrontend.key, host)
+        )
+
+        assertEquals(
+            "https://www.openstreetmap.org/search?query=38.882147%2C-76.99017",
+            LibRedirect.redirect("https://maps.google.com/?ll=38.882147,-76.99017", osmFrontend.key, host)
+        )
+
+        assertEquals(
+            "https://www.openstreetmap.org/search?query=48.857832%2C2.295226",
+            LibRedirect.redirect(
+                "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=48.857832,2.295226&heading=-45&pitch=38&fov=80",
+                osmFrontend.key,
+                host
+            )
+        )
+
+        assertEquals("https://www.openstreetmap.org/#map=14/48.1954385/16.3437521&", LibRedirect.redirect("https://www.google.com/maps/@48.1954385,16.3437521,14z", osmFrontend.key, host))
     }
 }

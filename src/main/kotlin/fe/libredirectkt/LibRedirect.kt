@@ -21,16 +21,15 @@ private val placeRegex = Regex("\\/place\\/(.*)\\/")
 
 private fun convertMapCentre(url: UriKt): Triple<String, String, String>? {
     url.path?.let {
-        mapCentreRegex.matchEntire(it)?.groupValues?.let {
-            val (_, lat, lon, zoom) = it
-            return Triple(lat, lon, zoom)
+        mapCentreRegex.find(it)?.groupValues?.let { groupValues ->
+            val (_, lat, lon, zoom) = groupValues
+            return Triple(zoom, lat, lon)
         }
     }
 
-    val query = url.splitQuery
-    if (query.contains("center")) {
-        query["center"]?.split(",")?.let {
-            return Triple(it[0], it[1], query["zoom"] ?: "17")
+    if (url.splitQuery.containsKey("center")) {
+        url.splitQuery["center"]!!.split(",").let {
+            return Triple(url.splitQuery["zoom"] ?: "17", it[0], it[1])
         }
     }
 
@@ -148,7 +147,7 @@ enum class RedirectFrontend(vararg val keys: String) {
     Scribe("scribe") {
         override fun redirect(uri: UriKt, instanceHost: String): String? {
             val result = uri.host?.let { Regex("^(link|cdn-images-\\d+|.*)\\.medium\\.com").find(it)?.groupValues }
-            if(result != null && result.size > 2){
+            if (result != null && result.size > 2) {
                 val subdomain = result[1]
                 if (subdomain != "link" || !subdomain.startsWith("cdn-images")) {
                     return "${instanceHost}/@${subdomain}${uri.path}?${uri.query}"
@@ -174,7 +173,61 @@ enum class RedirectFrontend(vararg val keys: String) {
     },
     OSM("osm") {
         override fun redirect(uri: UriKt, instanceHost: String): String? {
-            return null
+            val travelModes = mapOf(
+                "driving" to "fossgis_osrm_car",
+                "walking" to "fossgis_osrm_foot",
+                "bicycling" to "fossgis_osrm_bike",
+                "transit" to "fossgis_osrm_car"
+            )
+
+            val mapCentreData = convertMapCentre(uri)
+            var mapCentre = "#"
+            if (mapCentreData != null) {
+                mapCentre = "#map=${mapCentreData.first}/${mapCentreData.second}/${mapCentreData.third}"
+            }
+
+            val prefs = mutableMapOf<String, String>()
+//            if(uri.splitQuery.containsKey("layer")){
+//                prefs["layers"] =
+//            }
+
+            // we currently can't implement /dir and /embed since they send extra requests which we don't currently support
+            if (uri.path != null && uri.path!!.contains("data=")) {
+                dataLatLngRegex.find(uri.path!!)?.groupValues?.let {
+                    val (_, mlat, mlon) = it
+                    return "$instanceHost/search?query=$mlat%2C$mlon"
+                }
+            } else if (uri.splitQuery.containsKey("ll")) {
+                val (mlat, mlon) = uri.splitQuery["ll"]!!.split(",")
+                return "$instanceHost/search?query=$mlat%2C$mlon"
+            } else if (uri.splitQuery.containsKey("viewpoint")) {
+                val (mlat, mlon) = uri.splitQuery["viewpoint"]!!.split(",")
+                return "$instanceHost/search?query=$mlat%2C$mlon"
+            } else {
+                val query = if (uri.splitQuery.containsKey("q")) {
+                    uri.splitQuery["q"]!!
+                } else if (uri.splitQuery.containsKey("query")) {
+                    uri.splitQuery["query"]!!
+                } else if (uri.path != null) {
+                    placeRegex.find(uri.path!!)?.groupValues?.let { it[1] }
+                } else null
+
+                if (query != null) {
+                    return "$instanceHost/search?query=${query}${mapCentre}&${
+                        URLEncoder.encode(
+                            prefs.makeQuery(),
+                            StandardCharsets.UTF_8
+                        )
+                    }"
+                }
+            }
+
+            return "$instanceHost/${mapCentre}&${
+                URLEncoder.encode(
+                    prefs.makeQuery(),
+                    StandardCharsets.UTF_8
+                )
+            }"
         }
     },
     Facil("facil") {
