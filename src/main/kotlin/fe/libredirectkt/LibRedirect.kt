@@ -232,6 +232,63 @@ enum class RedirectFrontend(vararg val keys: String) {
     },
     Facil("facil") {
         override fun redirect(uri: UriKt, instanceHost: String): String? {
+            val travelModes = mapOf(
+                "driving" to "car",
+                "walking" to "pedestrian",
+                "bicycling" to "bicycle",
+                "transit" to "car"
+            )
+
+            val mapCentreData = convertMapCentre(uri)
+            var mapCentre = "#"
+            if (mapCentreData != null) {
+                mapCentre = "#${mapCentreData.first}/${mapCentreData.second}/${mapCentreData.third}"
+            }
+
+            val prefs = mutableMapOf<String, String>()
+//            if(uri.splitQuery.containsKey("layer")){
+//                prefs["layers"] =
+//            }
+
+            if (uri.path != null && uri.path!!.contains("/embed")) {
+                val query = if (uri.splitQuery.containsKey("q")) {
+                    uri.splitQuery["q"]!!
+                } else if (uri.splitQuery.containsKey("query")) {
+                    uri.splitQuery["query"]!!
+                } else if (uri.splitQuery.containsKey("pb")) {
+                    kotlin.runCatching { uri.splitQuery["pb"]!!.split(Regex("!2s(.*?)!"))[1] }.getOrNull()
+                } else null
+
+                return "$instanceHost/#q=$query"
+            } else if(uri.path != null && uri.path!!.contains("/dir")){
+                val travelMode = uri.splitQuery["travelmode"]
+                val origin = uri.splitQuery["origin"]
+                val destination = uri.splitQuery["destination"]
+
+                return instanceHost + "/#q=" + origin + "%20to%20" + destination + "%20by%20" + travelModes[travelMode]
+            } else if (uri.path != null && uri.path!!.contains("data=")) {
+                dataLatLngRegex.find(uri.path!!)?.groupValues?.let {
+                    val (_, mlat, mlon) = it
+                    return "$instanceHost/#q=${mlat}%2C${mlon}"
+                }
+            } else if (uri.splitQuery.containsKey("ll")) {
+                val (mlat, mlon) = uri.splitQuery["ll"]!!.split(",")
+                return "$instanceHost/#q=${mlat}%2C${mlon}"
+            } else if (uri.splitQuery.containsKey("viewpoint")) {
+                val (mlat, mlon) = uri.splitQuery["viewpoint"]!!.split(",")
+                return "$instanceHost/#q=${mlat}%2C${mlon}"
+            } else {
+                val query = if (uri.splitQuery.containsKey("q")) {
+                    uri.splitQuery["q"]!!
+                } else if (uri.splitQuery.containsKey("query")) {
+                    uri.splitQuery["query"]!!
+                } else if (uri.path != null) {
+                    placeRegex.find(uri.path!!)?.groupValues?.let { it[1] } ?: ""
+                } else ""
+
+                return "${instanceHost}/$mapCentre/Mpnk/$query"
+            }
+
             return null
         }
     },
