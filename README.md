@@ -3,4 +3,4 @@
 (Unfinished) Kotlin implementation of [LibRedirect](https://github.com/libredirect/libredirect)
 
 Last updated
-at `ffbb946b5c50e48ad78c7f3f5f1fe30b150a08e3` ([Diff](https://github.com/libredirect/libredirect/compare/ffbb946b5c50e48ad78c7f3f5f1fe30b150a08e3...master))
+at `d7848d6730e57c813eaf8546d73e9172ef301592` ([Diff](https://github.com/libredirect/libredirect/compare/d7848d6730e57c813eaf8546d73e9172ef301592...master))

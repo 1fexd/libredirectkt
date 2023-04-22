@@ -1,6 +1,5 @@
 package fe.libredirectkt
 
-import java.net.URL
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -164,10 +163,11 @@ enum class RedirectFrontend(vararg val keys: String) {
     },
     LibreTranslate("libreTranslate") {
         override fun redirect(uri: UriKt, instanceHost: String): String {
-            return "$instanceHost/?${uri.query}"
-                .replace(Regex("(?<=\\/?)sl"), "source")
-                .replace(Regex("(?<=&)tl"), "target")
-                .replace(Regex("(?<=&)text"), "q")
+            val query = uri.query
+                ?.replace("sl", "source")
+                ?.replace("tl", "target")
+                ?.replace("text", "q")
+            return "$instanceHost/?${query}"
         }
 
     },
@@ -260,7 +260,7 @@ enum class RedirectFrontend(vararg val keys: String) {
                 } else null
 
                 return "$instanceHost/#q=$query"
-            } else if(uri.path != null && uri.path!!.contains("/dir")){
+            } else if (uri.path != null && uri.path!!.contains("/dir")) {
                 val travelMode = uri.splitQuery["travelmode"]
                 val origin = uri.splitQuery["origin"]
                 val destination = uri.splitQuery["destination"]
@@ -433,7 +433,7 @@ enum class RedirectFrontend(vararg val keys: String) {
             return "$instanceHost${uri.path}?${uri.query}"
         }
     },
-    MikuIndividious("mikuIndividious") {
+    MikuIndividious("mikuInvidious") {
         override fun redirect(uri: UriKt, instanceHost: String): String? {
             if (uri.host == "bilibili.com" || uri.host == "www.bilibili.com" || uri.host == "b23.tv") {
                 return "${instanceHost}${uri.path}?${uri.query}"
@@ -457,10 +457,10 @@ enum class RedirectFrontend(vararg val keys: String) {
                 if (uri.path == "/") {
                     return "${instanceHost}/artist.php?name=${artist}"
                 } else {
-                    val regex = uri.path?.let { Regex("^\\/(.*)\\/(.*)").find(it)?.groupValues }
-                    if (regex != null) {
-                        val type = regex[1]
-                        val name = regex[2]
+                    val match = uri.path?.let { Regex("^\\/(.*)\\/(.*)").find(it)?.groupValues }
+                    if (match != null) {
+                        val type = match[1]
+                        val name = match[2]
                         return "${instanceHost}/release.php?artist=${artist}&type=${type}&name=${name}"
                     }
                 }
