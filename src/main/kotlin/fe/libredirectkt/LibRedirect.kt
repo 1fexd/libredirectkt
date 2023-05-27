@@ -35,6 +35,7 @@ private fun convertMapCentre(url: UriKt): Triple<String, String, String>? {
     return null
 }
 
+// browser_extension/src/assets/javascripts
 enum class RedirectFrontend(vararg val keys: String) {
     Beatbump("beatbump") {
         override fun redirect(uri: UriKt, instanceHost: String): String {
@@ -534,7 +535,9 @@ object LibRedirect {
         "gothub" to listOf("https://gh.odyssey346.dev"),
         "mikuIndividious" to listOf("https://mikuinv.resrv.org"),
         "tent" to listOf("https://tent.sny.sh"),
-        "wolfreeAlpha" to listOf("https://gqq.gitlab.io", "https://uqq.gitlab.io")
+        "wolfreeAlpha" to listOf("https://gqq.gitlab.io", "https://uqq.gitlab.io"),
+        "libreSpeed" to listOf("https://librespeed.org"),
+        "jitsi" to listOf("https://meet.jit.si", "https://8x8.vc"),
     )
 
     fun redirect(url: String, frontendKey: String, instance: String): String? {
