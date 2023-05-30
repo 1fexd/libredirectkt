@@ -434,7 +434,7 @@ enum class RedirectFrontend(vararg val keys: String) {
             return "$instanceHost${uri.path}?${uri.query}"
         }
     },
-    MikuIndividious("mikuInvidious") {
+    MikuInvidious("mikuInvidious") {
         override fun redirect(uri: UriKt, instanceHost: String): String? {
             if (uri.host == "bilibili.com" || uri.host == "www.bilibili.com" || uri.host == "b23.tv") {
                 return "${instanceHost}${uri.path}?${uri.query}"
@@ -533,7 +533,7 @@ object LibRedirect {
         "suds" to listOf("https://sd.vern.cc"),
         "waybackClassic" to listOf("https://wayback-classic.net"),
         "gothub" to listOf("https://gh.odyssey346.dev"),
-        "mikuIndividious" to listOf("https://mikuinv.resrv.org"),
+        "mikuInvidious" to listOf("https://mikuinv.resrv.org"),
         "tent" to listOf("https://tent.sny.sh"),
         "wolfreeAlpha" to listOf("https://gqq.gitlab.io", "https://uqq.gitlab.io"),
         "libreSpeed" to listOf("https://librespeed.org"),
