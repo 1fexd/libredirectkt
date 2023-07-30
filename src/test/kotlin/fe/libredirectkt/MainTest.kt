@@ -16,15 +16,15 @@ class MainTest {
         assertEquals("youtube", ytService.key)
         assertEquals("invidious", ytService.defaultFrontend.key)
         assertEquals(
-            "https://inv.vern.cc",
-            LibRedirect.getDefaultInstanceForFrontend(ytService.defaultFrontend.key)?.firstOrNull()
+            "https://vid.puffyan.us",
+            LibRedirect.getDefaultInstanceForFrontend(ytService.defaultFrontend.key, instances)
         )
 
         assertEquals(
-            "https://inv.vern.cc/watch?v=V3zLnSGVdmE", LibRedirect.redirect(
+            "https://vid.puffyan.us/watch?v=V3zLnSGVdmE", LibRedirect.redirect(
                 "https://www.youtube.com/watch?v=V3zLnSGVdmE",
                 ytService.defaultFrontend.key,
-                LibRedirect.getDefaultInstanceForFrontend(ytService.defaultFrontend.key)?.first()!!
+                LibRedirect.getDefaultInstanceForFrontend(ytService.defaultFrontend.key, instances)!!
             )
         )
     }
@@ -40,14 +40,14 @@ class MainTest {
         assertEquals("twitter", twitterService.key)
         assertEquals("nitter", twitterService.defaultFrontend.key)
         assertEquals(
-            "https://nitter.net",
-            LibRedirect.getDefaultInstanceForFrontend(twitterService.defaultFrontend.key)?.firstOrNull()
+            "https://nitter.lacontrevoie.fr",
+            LibRedirect.getDefaultInstanceForFrontend(twitterService.defaultFrontend.key, instances)
         )
         assertEquals(
-            "https://nitter.net/MishaalRahman/status/1633529635253174274#m", LibRedirect.redirect(
+            "https://nitter.lacontrevoie.fr/MishaalRahman/status/1633529635253174274#m", LibRedirect.redirect(
                 "https://twitter.com/MishaalRahman/status/1633529635253174274",
                 twitterService.defaultFrontend.key,
-                LibRedirect.getDefaultInstanceForFrontend(twitterService.defaultFrontend.key)?.first()!!
+                LibRedirect.getDefaultInstanceForFrontend(twitterService.defaultFrontend.key, instances)!!
             )
         )
     }

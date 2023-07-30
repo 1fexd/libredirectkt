@@ -550,7 +550,7 @@ object LibRedirect {
         }
     }
 
-    fun getDefaultInstanceForFrontend(frontendKey: String): List<String>? {
-        return defaultInstances[frontendKey]
+    fun getDefaultInstanceForFrontend(frontendKey: String, instances: List<LibRedirectInstance>): String? {
+        return instances.find { it.frontendKey == frontendKey }?.hosts?.firstOrNull()
     }
 }
