@@ -2,19 +2,31 @@ package fe.libredirectkt
 
 import LibRedirectResource
 import com.google.gson.JsonElement
-import fe.gson.extensions.*
+import fe.gson.extension.io.fromJson
+import fe.gson.extension.json.array.strings
+import fe.gson.extension.json.array.stringsOrNull
+import fe.gson.extension.json.`object`.*
+import fe.gson.util.JsonIOUtil
 import java.io.InputStream
 
 object LibRedirectLoader {
-    fun loadBuiltInServices() = loadLibRedirectServices(loadLibRedirectJson(LibRedirectResource.getBuiltInLibRedirectConfigJson()!!))
-    fun loadBuiltInInstances() = loadLibRedirectInstances(loadLibRedirectJson(LibRedirectResource.getBuiltInLibRedirectInstancesJson()!!))
+    fun loadBuiltInServices() =
+        loadLibRedirectServices(loadLibRedirectJson(LibRedirectResource.getBuiltInLibRedirectConfigJson()!!))
 
-    fun loadLibRedirectJson(inputStream: InputStream) = inputStream.use { parseReaderAs<JsonElement>(it.reader()) }
-    fun loadLibRedirectJson(text: String) = parseStringAs<JsonElement>(text)
+    fun loadBuiltInInstances() =
+        loadLibRedirectInstances(loadLibRedirectJson(LibRedirectResource.getBuiltInLibRedirectInstancesJson()!!))
+
+    fun loadLibRedirectJson(inputStream: InputStream): JsonElement {
+        return inputStream.fromJson<JsonElement>()
+    }
+
+    fun loadLibRedirectJson(text: String): JsonElement {
+        return JsonIOUtil.fromJson<JsonElement>(text)
+    }
 
     fun loadLibRedirectInstances(obj: JsonElement): List<LibRedirectInstance> {
-        return obj.asJsonObject.keys(map = { it.asJsonObject }).map { (key, instanceObj) ->
-            LibRedirectInstance(key, instanceObj.array("clearnet").map { it.asString() })
+        return obj.asJsonObject.map { it.asJsonObject }.map { (key, instanceObj) ->
+            LibRedirectInstance(key, instanceObj.asArray("clearnet").strings())
         }
     }
 
@@ -22,22 +34,22 @@ object LibRedirectLoader {
         val obj = elem.asJsonObject
         val services = obj.getAsJsonObject("services")
 
-        return services.keys(map = { it.asJsonObject }).map { (key, service) ->
-            val frontends = service.obj("frontends").keys(map = { it.asJsonObject }).map { (frontendKey, frontendObj) ->
+        return services.asJsonObject.map { it.asJsonObject }.map { (key, service) ->
+            val frontends = service.asObject("frontends").map { it.asJsonObject }.map { (frontendKey, frontendObj) ->
                 LibRedirectFrontend(
                     frontendKey,
-                    frontendObj.string("name")!!,
-                    frontendObj.array("excludeTargets")?.map { it.asJsonPrimitive.asString } ?: listOf(),
-                    frontendObj.string("url")!!)
+                    frontendObj.asString("name"),
+                    frontendObj.asArrayOrNull("excludeTargets")?.stringsOrNull(false)?.map { it!! } ?: listOf(),
+                    frontendObj.asString("url"))
             }
 
             LibRedirectService(
                 key,
-                service.string("name")!!,
-                service.string("url")!!,
+                service.asString("name"),
+                service.asString("url"),
                 frontends,
-                frontends.find { it.name == service.obj("options").string("frontend") } ?: frontends.first(),
-                service.array("targets").map { Regex(it.asString()) })
+                frontends.find { it.name == service.asObject("options").asString("frontend") } ?: frontends.first(),
+                service.asArray("targets").strings().map { Regex(it) })
         }
     }
 }
