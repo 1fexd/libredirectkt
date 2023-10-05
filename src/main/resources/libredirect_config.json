@@ -18,6 +18,26 @@
 		}
 	},
 	"services": {
+		"youtubeMusic": {
+			"frontends": {
+				"hyperpipe": {
+					"name": "Hyperpipe",
+					"instanceList": true,
+					"url": "https://codeberg.org/Hyperpipe/Hyperpipe"
+				}
+			},
+			"targets": [
+				"^https?:\\/{2}music\\.youtube\\.com\\/"
+			],
+			"name": "YT Music",
+			"options": {
+				"enabled": false,
+				"frontend": "hyperpipe",
+				"unsupportedUrls": "bypass"
+			},
+			"imageType": "png",
+			"url": "https://music.youtube.com"
+		},
 		"youtube": {
 			"frontends": {
 				"invidious": {
@@ -60,7 +80,21 @@
 					"name": "CloudTube",
 					"embeddable": false,
 					"instanceList": true,
-					"url": "https://sr.ht/~cadence/tube/"
+					"url": "https://sr.ht/~cadence/tube",
+					"excludeTargets": [
+						2,
+						3
+					]
+				},
+				"tuboYoutube": {
+					"name": "Tubo",
+					"embeddable": false,
+					"instanceList": true,
+					"url": "https://github.com/migalmoreno/tubo",
+					"excludeTargets": [
+						2,
+						3
+					]
 				},
 				"freetube": {
 					"excludeTargets": [
@@ -92,7 +126,8 @@
 				"^https?:\\/{2}(i|s)\\.ytimg.com\\/vi\\/.*\\/..*",
 				"^https?:\\/{2}(www\\.)?youtube.com\\/watch?v=..*",
 				"^https?:\\/{2}(www\\.)?youtu\\.be\\/..*",
-				"^https?:\\/{2}(www\\.)?(youtube|youtube-nocookie)\\.com\\/embed\\/..*"
+				"^https?:\\/{2}(www\\.)?(youtube|youtube-nocookie)\\.com\\/embed\\/..*",
+				"^https?:\\/{2}music\\.youtube\\.com\\/"
 			],
 			"name": "YouTube",
 			"options": {
@@ -106,26 +141,6 @@
 			"embeddable": true,
 			"url": "https://youtube.com"
 		},
-		"youtubeMusic": {
-			"frontends": {
-				"hyperpipe": {
-					"name": "Hyperpipe",
-					"instanceList": true,
-					"url": "https://codeberg.org/Hyperpipe/Hyperpipe"
-				}
-			},
-			"targets": [
-				"^https?:\\/{2}music\\.youtube\\.com\\/"
-			],
-			"name": "YT Music",
-			"options": {
-				"enabled": false,
-				"frontend": "hyperpipe",
-				"unsupportedUrls": "bypass"
-			},
-			"imageType": "png",
-			"url": "https://music.youtube.com"
-		},
 		"twitter": {
 			"frontends": {
 				"nitter": {
@@ -136,9 +151,11 @@
 					"localhost": true
 				}
 			},
-			"targets": [	
+			"targets": [
 				"^https?:\\/{2}(www\\.|mobile\\.)?twitter\\.com\\/",
+				"^https?:\\/{2}(www\\.|mobile\\.)?x\\.com\\/",
 				"^https?:\\/{2}(pbs\\.|video\\.)twimg\\.com\\/",
+				"^https?:\\/{2}platform\\.x\\.com/embed\\/",
 				"^https?:\\/{2}platform\\.twitter\\.com/embed\\/",
 				"^https?:\\/{2}t\\.co\\/"
 			],
@@ -158,13 +175,13 @@
 			"frontends": {
 				"safetwitch": {
 					"name": "SafeTwitch",
-					"embeddable": false,
+					"embeddable": true,
 					"instanceList": true,
 					"url": "https://codeberg.org/dragongoose/safetwitch",
 					"localhost": false
 				}
 			},
-			"targets": [	
+			"targets": [
 				"^https?:\\/{2}(www\\.)?twitch\\.(tv|com)\\/"
 			],
 			"name": "Twitch",
@@ -176,7 +193,7 @@
 				"instance": "public"
 			},
 			"imageType": "svg",
-			"embeddable": false,
+			"embeddable": true,
 			"url": "https://twitch.tv"
 		},
 		"tiktok": {
@@ -200,6 +217,28 @@
 			},
 			"imageType": "png",
 			"url": "https://tiktok.com"
+		},
+		"instagram": {
+			"frontends": {
+				"proxigram": {
+					"name": "Proxigram",
+					"instanceList": true,
+					"url": "https://codeberg.org/ThePenguinDev/Proxigram",
+					"localhost": false
+				}
+			},
+			"targets": [
+				"^https?:\\/{2}(www\\.)?instagram\\.com"
+			],
+			"name": "Instagram",
+			"options": {
+				"enabled": false,
+				"frontend": "proxigram",
+				"unsupportedUrls": "bypass",
+				"instance": "public"
+			},
+			"imageType": "png",
+			"url": "https://www.instagram.com"
 		},
 		"reddit": {
 			"frontends": {
@@ -274,6 +313,29 @@
 			},
 			"imageType": "svg",
 			"url": "https://www.pixiv.net"
+		},
+		"soundcloud": {
+			"frontends": {
+				"tuboSoundcloud": {
+					"name": "Tubo",
+					"embeddable": false,
+					"instanceList": true,
+					"url": "https://github.com/migalmoreno/tubo"
+				}
+			},
+			"targets": [
+				"^https?:\\/{2}soundcloud\\.com"
+			],
+			"name": "SoundCloud",
+			"options": {
+				"enabled": false,
+				"redirectType": "main_frame",
+				"frontend": "tuboSoundcloud",
+				"unsupportedUrls": "bypass"
+			},
+			"imageType": "svg",
+			"embeddable": false,
+			"url": "https://soundcloud.com"
 		},
 		"medium": {
 			"frontends": {
@@ -429,6 +491,11 @@
 					"name": "LibreX",
 					"instanceList": true,
 					"url": "https://github.com/hnhx/librex"
+				},
+				"4get": {
+					"name": "4get",
+					"instanceList": true,
+					"url": "https://git.lolcat.ca/lolcat/4get"
 				}
 			},
 			"targets": [
@@ -450,12 +517,6 @@
 					"name": "SimplyTranslate",
 					"instanceList": true,
 					"url": "https://git.sr.ht/~metalune/simplytranslate_web",
-					"localhost": true
-				},
-				"lingva": {
-					"name": "Lingva Translate",
-					"instanceList": true,
-					"url": "https://github.com/TheDavidDelta/lingva-translate",
 					"localhost": true
 				},
 				"libreTranslate": {
@@ -480,14 +541,10 @@
 		},
 		"maps": {
 			"frontends": {
-				"facil": {
-					"name": "FacilMap",
-					"instanceList": true,
-					"url": "https://github.com/FacilMap/facilmap"
-				},
 				"osm": {
 					"name": "OpenStreetMap",
 					"instanceList": true,
+					"embeddable": true,
 					"url": "https://www.openstreetmap.org/"
 				}
 			},
@@ -497,54 +554,13 @@
 			],
 			"name": "Maps",
 			"options": {
+				"redirectType": "main_frame",
 				"enabled": false,
 				"frontend": "osm",
 				"unsupportedUrls": "bypass"
 			},
 			"imageType": "svgMono",
 			"url": "https://maps.libredirect.invalid"
-		},
-		"sendFiles": {
-			"frontends": {
-				"send": {
-					"name": "Send",
-					"instanceList": true,
-					"url": "https://gitlab.com/timvisee/send"
-				}
-			},
-			"targets": [
-				"^https?:\\/{2}send\\.libredirect\\.invalid",
-				"^https?:\\/{2}send\\.firefox\\.com\\/?$",
-				"^https?:\\/{2}sendfiles\\.online\\/?$"
-			],
-			"name": "Send Files",
-			"options": {
-				"enabled": false,
-				"unsupportedUrls": "bypass",
-				"frontend": "send"
-			},
-			"imageType": "svgMono",
-			"url": "https://send.libredirect.invalid"
-		},
-		"textStorage": {
-			"frontends": {
-				"privateBin": {
-					"name": "PrivateBin",
-					"instanceList": true,
-					"url": "https://privatebin.info"
-				}
-			},
-			"targets": [
-				"^https?:\\/{2}paste\\.libredirect\\.invalid"
-			],
-			"name": "Paste Text",
-			"options": {
-				"enabled": false,
-				"unsupportedUrls": "bypass",
-				"frontend": "privateBin"
-			},
-			"imageType": "svgMono",
-			"url": "https://paste.libredirect.invalid"
 		},
 		"reuters": {
 			"frontends": {
@@ -804,28 +820,6 @@
 			"imageType": "svg",
 			"url": "https://gitlab.com/"
 		},
-		"speedTest": {
-			"frontends": {
-				"libreSpeed": {
-					"name": "LibreSpeed",
-					"instanceList": true,
-					"url": "https://github.com/librespeed/speedtest"
-				}
-			},
-			"targets": [
-				"^https?:\\/{2}speedtest\\.libredirect\\.invalid\\/",
-				"^https?:\\/{2}(www\\.)?fast\\.com\\/$",
-				"^https?:\\/{2}(www\\.)?speedtest\\.net\\/$"
-			],
-			"name": "Speed Test",
-			"options": {
-				"enabled": false,
-				"unsupportedUrls": "bypass",
-				"frontend": "libreSpeed"
-			},
-			"imageType": "svgMono",
-			"url": "https://speedtest.libredirect.invalid"
-		},
 		"instructables": {
 			"name": "Instructables",
 			"frontends": {
@@ -850,46 +844,6 @@
 			},
 			"imageType": "svg",
 			"url": "https://www.instructables.com"
-		},
-		"meet": {
-			"name": "Meet",
-			"frontends": {
-				"jitsi": {
-					"name": "Jitsi",
-					"instanceList": true,
-					"url": "https://jitsi.org"
-				}
-			},
-			"targets": [
-				"^https?:\\/{2}meet\\.libredirect\\.invalid\\/"
-			],
-			"options": {
-				"enabled": false,
-				"unsupportedUrls": "bypass",
-				"frontend": "jitsi"
-			},
-			"imageType": "svgMono",
-			"url": "https://meet.libredirect.invalid"
-		},
-		"myIp": {
-			"frontends": {
-				"wtfismyip": {
-					"name": "wtfismyip",
-					"instanceList": true,
-					"url": "https://gitlab.com/wtfismyip/wtfismyip"
-				}
-			},
-			"targets": [
-				"^https?:\\/{2}myip\\.libredirect\\.invalid\\/"
-			],
-			"name": "My IP",
-			"options": {
-				"enabled": false,
-				"unsupportedUrls": "bypass",
-				"frontend": "wtfismyip"
-			},
-			"imageType": "svgMono",
-			"url": "https://myip.libredirect.invalid"
 		},
 		"wolframAlpha": {
 			"frontends": {
