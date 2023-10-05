@@ -16,12 +16,12 @@ class MainTest {
         assertEquals("youtube", ytService.key)
         assertEquals("invidious", ytService.defaultFrontend.key)
         assertEquals(
-            "https://vid.puffyan.us",
+            "https://invidious.fdn.fr",
             LibRedirect.getDefaultInstanceForFrontend(ytService.defaultFrontend.key, instances)
         )
 
         assertEquals(
-            "https://vid.puffyan.us/watch?v=V3zLnSGVdmE", LibRedirect.redirect(
+            "https://invidious.fdn.fr/watch?v=V3zLnSGVdmE", LibRedirect.redirect(
                 "https://www.youtube.com/watch?v=V3zLnSGVdmE",
                 ytService.defaultFrontend.key,
                 LibRedirect.getDefaultInstanceForFrontend(ytService.defaultFrontend.key, instances)!!
@@ -104,18 +104,18 @@ class MainTest {
         assertNotNull(facilService)
         assertNotNull(facilService.defaultFrontend)
         assertEquals("maps", facilService.key)
-        assertEquals("facil", facilService.defaultFrontend.key)
+        assertEquals("osm", facilService.defaultFrontend.key)
         val facilInstance = instances.find { it.frontendKey == "facil" }
         assertNotNull(facilInstance)
         val facilHost = facilInstance.hosts.find { it == "https://facilmap.org" }
         assertNotNull(facilHost)
         assertEquals(
-            "https://facilmap.org/#q=41.0328329%2C40.4883948",
+            "https://facilmap.org/search?query=41.0328329%2C40.4883948",
             LibRedirect.redirect(googleMapsUrl, facilService.defaultFrontend.key, facilHost)
         )
 
         assertEquals(
-            "https://facilmap.org/#q=38.882147%2C-76.99017",
+            "https://facilmap.org/search?query=38.882147%2C-76.99017",
             LibRedirect.redirect(
                 "https://maps.google.com/?ll=38.882147,-76.99017",
                 facilService.defaultFrontend.key,
@@ -124,7 +124,7 @@ class MainTest {
         )
 
         assertEquals(
-            "https://facilmap.org/#q=48.857832%2C2.295226",
+            "https://facilmap.org/search?query=48.857832%2C2.295226",
             LibRedirect.redirect(
                 "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=48.857832,2.295226&heading=-45&pitch=38&fov=80",
                 facilService.defaultFrontend.key, facilHost
@@ -132,7 +132,7 @@ class MainTest {
         )
 
         assertEquals(
-            "https://facilmap.org/#14/48.1954385/16.3437521/Mpnk/",
+            "https://facilmap.org/#map=14/48.1954385/16.3437521&",
             LibRedirect.redirect(
                 "https://www.google.com/maps/@48.1954385,16.3437521,14z",
                 facilService.defaultFrontend.key,
