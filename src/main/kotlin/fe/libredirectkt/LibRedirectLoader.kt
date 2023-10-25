@@ -6,7 +6,7 @@ import fe.gson.extension.io.fromJson
 import fe.gson.extension.json.array.strings
 import fe.gson.extension.json.array.stringsOrNull
 import fe.gson.extension.json.`object`.*
-import fe.gson.util.JsonIOUtil
+import fe.gson.util.Json
 import java.io.InputStream
 
 object LibRedirectLoader {
@@ -21,7 +21,7 @@ object LibRedirectLoader {
     }
 
     fun loadLibRedirectJson(text: String): JsonElement {
-        return JsonIOUtil.fromJson<JsonElement>(text)
+        return Json.fromJson<JsonElement>(text)
     }
 
     fun loadLibRedirectInstances(obj: JsonElement): List<LibRedirectInstance> {
