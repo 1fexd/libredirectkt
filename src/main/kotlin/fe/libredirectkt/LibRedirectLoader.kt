@@ -2,11 +2,6 @@ package fe.libredirectkt
 
 import LibRedirectResource
 import com.google.gson.JsonElement
-import fe.gson.compatlibredirect.extension.io.fromJson
-import fe.gson.compatlibredirect.extension.json.array.strings
-import fe.gson.compatlibredirect.extension.json.array.stringsOrNull
-import fe.gson.compatlibredirect.extension.json.`object`.*
-import fe.gson.compatlibredirect.util.Json
 import java.io.InputStream
 
 object LibRedirectLoader {

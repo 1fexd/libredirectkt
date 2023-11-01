@@ -14,6 +14,7 @@ repositories {
 }
 
 dependencies {
+    implementation("com.gitlab.grrfe:gson-ext:8.1.2")
     implementation("com.google.code.gson:gson:2.10.1")
 
     testImplementation(kotlin("test"))
