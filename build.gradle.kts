@@ -21,7 +21,7 @@ dependencies {
 }
 
 tasks.withType<Jar> {
-    exclude("fetch_latest_libredirect.sh")
+    sourceSets.main.get().output.resourcesDir?.listFiles()?.map { it.name }?.let { exclude(it) }
 }
 
 publishing {

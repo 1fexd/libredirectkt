@@ -40,11 +40,11 @@ class MainTest {
         assertEquals("twitter", twitterService.key)
         assertEquals("nitter", twitterService.defaultFrontend.key)
         assertEquals(
-            "https://nitter.lacontrevoie.fr",
+            "https://nitter:nitter@nitter.nixnet.services",
             LibRedirect.getDefaultInstanceForFrontend(twitterService.defaultFrontend.key, instances)
         )
         assertEquals(
-            "https://nitter.lacontrevoie.fr/MishaalRahman/status/1633529635253174274#m", LibRedirect.redirect(
+            "https://nitter:nitter@nitter.nixnet.services/MishaalRahman/status/1633529635253174274#m", LibRedirect.redirect(
                 "https://twitter.com/MishaalRahman/status/1633529635253174274",
                 twitterService.defaultFrontend.key,
                 LibRedirect.getDefaultInstanceForFrontend(twitterService.defaultFrontend.key, instances)!!

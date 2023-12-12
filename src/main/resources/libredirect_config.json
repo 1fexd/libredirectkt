@@ -18,26 +18,6 @@
 		}
 	},
 	"services": {
-		"youtubeMusic": {
-			"frontends": {
-				"hyperpipe": {
-					"name": "Hyperpipe",
-					"instanceList": true,
-					"url": "https://codeberg.org/Hyperpipe/Hyperpipe"
-				}
-			},
-			"targets": [
-				"^https?:\\/{2}music\\.youtube\\.com\\/"
-			],
-			"name": "YT Music",
-			"options": {
-				"enabled": false,
-				"frontend": "hyperpipe",
-				"unsupportedUrls": "bypass"
-			},
-			"imageType": "png",
-			"url": "https://music.youtube.com"
-		},
 		"youtube": {
 			"frontends": {
 				"invidious": {
@@ -117,17 +97,25 @@
 					"desktopApp": true,
 					"instanceList": false,
 					"url": "https://github.com/yattee/yattee"
+				},
+				"freetubePwa": {
+					"excludeTargets": [
+						2,
+						3
+					],
+					"name": "FreeTube PWA",
+					"embeddable": false,
+					"instanceList": false,
+					"url": "https://github.com/MarmadileManteater/FreeTubeCordova"
 				}
 			},
 			"targets": [
-				"^https?:\\/{2}redirect\\.invidious\\.io\\/.*",
 				"^https?:\\/{2}(www\\.|m\\.)?youtube.com(\\/|$)(?!iframe_api\\/|redirect\\/)",
 				"^https?:\\/{2}img\\.youtube.com\\/vi\\/.*\\/..*",
 				"^https?:\\/{2}(i|s)\\.ytimg.com\\/vi\\/.*\\/..*",
 				"^https?:\\/{2}(www\\.)?youtube.com\\/watch?v=..*",
 				"^https?:\\/{2}(www\\.)?youtu\\.be\\/..*",
-				"^https?:\\/{2}(www\\.)?(youtube|youtube-nocookie)\\.com\\/embed\\/..*",
-				"^https?:\\/{2}music\\.youtube\\.com\\/"
+				"^https?:\\/{2}(www\\.)?(youtube|youtube-nocookie)\\.com\\/embed\\/..*"
 			],
 			"name": "YouTube",
 			"options": {
@@ -140,6 +128,32 @@
 			"imageType": "png",
 			"embeddable": true,
 			"url": "https://youtube.com"
+		},
+		"youtubeMusic": {
+			"frontends": {
+				"hyperpipe": {
+					"name": "Hyperpipe",
+					"instanceList": true,
+					"url": "https://codeberg.org/Hyperpipe/Hyperpipe"
+				},
+				"invidiousMusic": {
+					"name": "Invidious",
+					"embeddable": true,
+					"instanceList": true,
+					"url": "https://invidious.io/"
+				}
+			},
+			"targets": [
+				"^https?:\\/{2}music\\.youtube\\.com\\/"
+			],
+			"name": "YT Music",
+			"options": {
+				"enabled": false,
+				"frontend": "hyperpipe",
+				"unsupportedUrls": "bypass"
+			},
+			"imageType": "png",
+			"url": "https://music.youtube.com"
 		},
 		"twitter": {
 			"frontends": {
@@ -179,10 +193,17 @@
 					"instanceList": true,
 					"url": "https://codeberg.org/dragongoose/safetwitch",
 					"localhost": false
+				},
+				"twineo": {
+					"name": "Twineo",
+					"embeddable": true,
+					"instanceList": true,
+					"url": "https://codeberg.org/CloudyyUw/twineo",
+					"localhost": false
 				}
 			},
 			"targets": [
-				"^https?:\\/{2}(www\\.)?twitch\\.(tv|com)\\/"
+				"^https?:\\/{2}(www\\.|clips\\.)?twitch\\.(tv|com)\\/"
 			],
 			"name": "Twitch",
 			"options": {
@@ -519,6 +540,12 @@
 					"url": "https://git.sr.ht/~metalune/simplytranslate_web",
 					"localhost": true
 				},
+				"mozhi": {
+					"name": "Mozhi",
+					"instanceList": true,
+					"url": "https://codeberg.org/aryak/mozhi",
+					"localhost": false
+				},
 				"libreTranslate": {
 					"name": "LibreTranslate",
 					"instanceList": true,
@@ -561,6 +588,48 @@
 			},
 			"imageType": "svgMono",
 			"url": "https://maps.libredirect.invalid"
+		},
+		"sendFiles": {
+			"frontends": {
+				"send": {
+					"name": "Send",
+					"instanceList": true,
+					"url": "https://gitlab.com/timvisee/send"
+				}
+			},
+			"targets": [
+				"^https?:\\/{2}send\\.libredirect\\.invalid",
+				"^https?:\\/{2}send\\.firefox\\.com\\/?$",
+				"^https?:\\/{2}sendfiles\\.online\\/?$"
+			],
+			"name": "Send Files",
+			"options": {
+				"enabled": false,
+				"unsupportedUrls": "bypass",
+				"frontend": "send"
+			},
+			"imageType": "svgMono",
+			"url": "https://send.libredirect.invalid"
+		},
+		"textStorage": {
+			"frontends": {
+				"privateBin": {
+					"name": "PrivateBin",
+					"instanceList": true,
+					"url": "https://privatebin.info"
+				}
+			},
+			"targets": [
+				"^https?:\\/{2}paste\\.libredirect\\.invalid"
+			],
+			"name": "Paste Text",
+			"options": {
+				"enabled": false,
+				"unsupportedUrls": "bypass",
+				"frontend": "privateBin"
+			},
+			"imageType": "svgMono",
+			"url": "https://paste.libredirect.invalid"
 		},
 		"reuters": {
 			"frontends": {
@@ -641,7 +710,8 @@
 			},
 			"targets": [
 				"^https?:\\/{2}(www\\.)?stackoverflow\\.com\\/",
-				"^https?:\\/{2}([a-zA-Z0-9-]+\\.)?stackexchange\\.com\\/"
+				"^https?:\\/{2}([a-zA-Z0-9-]+\\.)?stackexchange\\.com\\/",
+				"^https?:\\/{2}(www\\.)?(superuser|askubuntu)\\.com\\/"
 			],
 			"name": "Stack Overflow",
 			"options": {
@@ -845,6 +915,26 @@
 			"imageType": "svg",
 			"url": "https://www.instructables.com"
 		},
+		"meet": {
+			"name": "Meet",
+			"frontends": {
+				"jitsi": {
+					"name": "Jitsi",
+					"instanceList": true,
+					"url": "https://jitsi.org"
+				}
+			},
+			"targets": [
+				"^https?:\\/{2}meet\\.libredirect\\.invalid\\/"
+			],
+			"options": {
+				"enabled": false,
+				"unsupportedUrls": "bypass",
+				"frontend": "jitsi"
+			},
+			"imageType": "svgMono",
+			"url": "https://meet.libredirect.invalid"
+		},
 		"wolframAlpha": {
 			"frontends": {
 				"wolfreeAlpha": {
@@ -864,6 +954,73 @@
 			},
 			"imageType": "svg",
 			"url": "https://www.wolframalpha.com"
+		},
+		"tekstowo": {
+			"frontends": {
+				"tekstoLibre": {
+					"name": "TekstoLibre",
+					"instanceList": true,
+					"url": "https://github.com/Davilarek/TekstoLibre"
+				}
+			},
+			"targets": [
+				"^https?:\\/{2}(www\\.)?tekstowo\\.pl\\/"
+			],
+			"name": "Tekstowo.pl",
+			"options": {
+				"enabled": false,
+				"unsupportedUrls": "bypass",
+				"frontend": "tekstoLibre"
+			},
+			"imageType": "svg",
+			"url": "https://www.tekstowo.pl"
+		},
+		"bluesky": {
+			"frontends": {
+				"skyview": {
+					"name": "Skyview",
+					"instanceList": true,
+					"url": "https://github.com/badlogic/skyview"
+				}
+			},
+			"targets": [
+				"^https?:\\/{2}bsky\\.app\\/"
+			],
+			"name": "Bluesky",
+			"options": {
+				"enabled": false,
+				"unsupportedUrls": "bypass",
+				"frontend": "skyview"
+			},
+			"imageType": "svg",
+			"url": "https://bsky.app/"
+		},
+		"tumblr": {
+			"frontends": {
+				"priviblur": {
+					"name": "Priviblur",
+					"embeddable": true,
+					"instanceList": true,
+					"url": "https://github.com/syeopite/priviblur",
+					"localhost": true
+				}
+			},
+			"targets": [
+				"^https?:\\/{2}(media\\.|assets\\.|static\\.)?tumblr\\.com\\/",
+				"^https?:\\/{2}[0-9]+\\.media\\.tumblr\\.com\\/",
+				"^https?:\\/{2}(www\\.)?(.*)\\.tumblr.com\\/"
+			],
+			"name": "Tumblr",
+			"options": {
+				"enabled": false,
+				"redirectType": "main_frame",
+				"unsupportedUrls": "bypass",
+				"frontend": "priviblur",
+				"instance": "public"
+			},
+			"imageType": "svg",
+			"embeddable": true,
+			"url": "https://tumblr.com"
 		}
 	}
 }
