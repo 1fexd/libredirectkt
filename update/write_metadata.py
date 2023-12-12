@@ -9,7 +9,7 @@ now = int(time.time() * 1000.0)
 
 cwd = os.getcwd()
 libredirectkt = os.path.abspath(os.path.join(cwd, os.pardir))
-source_path = os.path.join(libredirectkt, "kotlin")
+source_path = os.path.join(libredirectkt, "src", "main", "kotlin")
 
 with open_file(os.path.join(source_path, "LibRedirectMetadata.kt")) as fw:
     fw.write_multiline(f"""

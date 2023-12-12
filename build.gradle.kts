@@ -20,11 +20,6 @@ dependencies {
     testImplementation(kotlin("test"))
 }
 
-tasks.withType<Jar> {
-    sourceSets.main.get().output.resourcesDir?.listFiles()?.filter { it.extension != "json" }?.map { it.name }
-        ?.let { exclude(it) }
-}
-
 publishing {
     publications {
         create<MavenPublication>("maven") {
