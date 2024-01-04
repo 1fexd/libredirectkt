@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.9.20"
+    kotlin("jvm") version "1.9.22"
     java
     `maven-publish`
     id("net.nemerosa.versioning") version "3.0.0"
@@ -13,9 +13,14 @@ repositories {
     maven(url = "https://jitpack.io")
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 dependencies {
     implementation("com.gitlab.grrfe:gson-ext:11.0.0")
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.github.1fexd:uriparser:0.0.7")
 
     testImplementation(kotlin("test"))
 }
