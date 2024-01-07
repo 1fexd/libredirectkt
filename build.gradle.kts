@@ -40,7 +40,7 @@ val shadowJarTask = tasks.named<ShadowJar>("shadowJar") {
     mergeServiceFiles()
     exclude("META-INF/**/*")
 
-    project.relocatePackages(shadowImplementation, project.group.toString()).forEach { (from, to) ->
+    project.relocatePackages(shadowImplementation).forEach { (from, to) ->
         relocate(from, to)
     }
 
