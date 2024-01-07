@@ -26,7 +26,7 @@ dependencies {
     api(kotlin("stdlib"))
 
     shadowImplementation("com.gitlab.grrfe:gson-ext:11.0.0")
-    shadowImplementation("com.google.code.gson:gson:2.10.1")
+    shadowImplementation("com.google.code.gson:gson:2.+")
     shadowImplementation("com.github.1fexd:uriparser:0.0.7")
 
     testImplementation(kotlin("test"))
