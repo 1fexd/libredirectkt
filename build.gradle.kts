@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import fe.buildsrc.Package.relocatePackages
 
 plugins {
     kotlin("jvm") version "1.9.22"
@@ -38,8 +39,8 @@ val shadowJarTask = tasks.named<ShadowJar>("shadowJar") {
     mergeServiceFiles()
     exclude("META-INF/**/*")
 
-    listOf("fe", "com.google.gson").forEach { pkg ->
-        relocate(pkg, "${project.group}.internal$pkg")
+    project.relocatePackages(shadowImplementation, project.group.toString()).forEach { (from, to) ->
+        relocate(from, to)
     }
 
     archiveClassifier.set("")
