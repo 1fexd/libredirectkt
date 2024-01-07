@@ -1,3 +1,3 @@
 object LibRedirectMetadata {
-    const val fetchedAt = 1704367614766L
+    const val fetchedAt = 1704643941146L
 }
