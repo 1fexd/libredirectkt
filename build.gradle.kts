@@ -45,7 +45,6 @@ val shadowJarTask = tasks.named<ShadowJar>("shadowJar") {
     }
 
     archiveClassifier.set("")
-    minimize()
     configurations = listOf(shadowImplementation)
 }
 
