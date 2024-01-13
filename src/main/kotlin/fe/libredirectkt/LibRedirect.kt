@@ -3,7 +3,6 @@ package fe.libredirectkt
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
-
 fun Map<String, String?>.makeQuery(): String {
     return this.map {
         if (it.value != null) {
