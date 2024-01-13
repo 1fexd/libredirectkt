@@ -27,7 +27,10 @@ fun DependencyHandler.bundledDependency(dependencyNotation: String) {
     add("shadowImplementation", dependencyNotation)
 
     val tag = dependencyNotation.replace(":", "_")
-    shadow("com.gitlab.grrfe:bundled-dependencies:$tag")
+    val bundled = "com.gitlab.grrfe:bundled-dependencies:$tag"
+
+    api(bundled)
+    shadow(bundled)
 }
 
 dependencies {
@@ -69,7 +72,6 @@ tasks.test {
 tasks.named("jar") {
     enabled = false
 }
-
 
 publishing {
     publications {
