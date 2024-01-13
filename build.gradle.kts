@@ -23,14 +23,27 @@ val shadowImplementation = configurations.create("shadowImplementation") {
     isTransitive = false
 }
 
+
+//configurations {
+//    artifacts {
+//        runtimeElements(shadow.get())
+//    }
+//}
+
 fun DependencyHandler.bundledDependency(dependencyNotation: String) {
     add("shadowImplementation", dependencyNotation)
 
     val tag = dependencyNotation.replace(":", "_")
     val bundled = "com.gitlab.grrfe:bundled-dependencies:$tag"
-
-    api(bundled)
     shadow(bundled)
+
+//    artifacts {
+//        runtimeElements("$dependencyNotation@jar")
+//    }
+//
+
+//    api(bundled)
+//    runtimeElements(bundled)
 }
 
 dependencies {
@@ -59,9 +72,7 @@ val shadowJarTask = tasks.named<ShadowJar>("shadowJar") {
     configurations = listOf()
 }
 
-
-
-tasks.withType<Jar>() {
+tasks.withType<Jar> {
     exclude("*/**/*.idea")
 }
 
@@ -73,17 +84,35 @@ tasks.named("jar") {
     enabled = false
 }
 
+//configurations {
+//    artifacts {
+//        runtimeElements.get().forEach {
+//            println(it)
+//        }
+//        shadowImplementation.resolvedConfiguration.resolvedArtifacts.forEach {
+//            println(it)
+//        }
+
+//        runtimeElements()
+//        runtimeOnly()
+//    }
+//}
+
+//tasks.named("jar") {
+//    enabled = false
+//}
+
 publishing {
     publications {
         create<MavenPublication>("shadow") {
             shadow.component(this)
+//            from(components["java"])
 
             groupId = project.group.toString()
             version = project.version.toString()
         }
     }
 }
-
 
 tasks.whenTaskAdded {
     if (name == "generateMetadataFileForPluginShadowPublication") {
