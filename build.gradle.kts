@@ -5,8 +5,8 @@ plugins {
     kotlin("jvm") version "1.9.22"
     `java-library`
     `maven-publish`
-    id("net.nemerosa.versioning") version "3.0.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("net.nemerosa.versioning") version "3.0.0"
 }
 
 group = "fe.libredirectkt"
@@ -17,17 +17,25 @@ repositories {
     maven(url = "https://jitpack.io")
 }
 
-val shadowImplementation = configurations.create("shadowImplementation"){
-    configurations.implementation.get().extendsFrom(this)
+val implementation by configurations
+val shadowImplementation = configurations.create("shadowImplementation") {
+    implementation.extendsFrom(this)
     isTransitive = false
+}
+
+fun DependencyHandler.bundledDependency(dependencyNotation: String) {
+    add("shadowImplementation", dependencyNotation)
+
+    val tag = dependencyNotation.replace(":", "_")
+    shadow("com.gitlab.grrfe:bundled-dependencies:$tag")
 }
 
 dependencies {
     api(kotlin("stdlib"))
 
-    shadowImplementation("com.gitlab.grrfe:gson-ext:11.0.0")
-    shadowImplementation("com.google.code.gson:gson:2.+")
-    shadowImplementation("com.github.1fexd:uriparser:0.0.7")
+    bundledDependency("com.gitlab.grrfe:gson-ext:11.0.0")
+    bundledDependency("com.google.code.gson:gson:2.10.1")
+    bundledDependency("com.github.1fexd:uriparser:0.0.7")
 
     testImplementation(kotlin("test"))
 }
@@ -40,36 +48,43 @@ val shadowJarTask = tasks.named<ShadowJar>("shadowJar") {
     mergeServiceFiles()
     exclude("META-INF/**/*")
 
-    project.relocatePackages(shadowImplementation, "com.github.1fexd.libredirectkt").forEach { (from, to) ->
+    project.relocatePackages(shadowImplementation).forEach { (from, to) ->
         relocate(from, to)
     }
 
     archiveClassifier.set("")
-    configurations = listOf(shadowImplementation)
+    configurations = listOf()
 }
 
 
-tasks.named("jar").configure {
-    enabled = false
+
+tasks.withType<Jar>() {
+    exclude("*/**/*.idea")
 }
 
 tasks.test {
     useJUnitPlatform()
 }
 
+tasks.named("jar") {
+    enabled = false
+}
+
+
 publishing {
     publications {
         create<MavenPublication>("shadow") {
-            setArtifacts(listOf(shadowJarTask.get()))
+            shadow.component(this)
+
             groupId = project.group.toString()
             version = project.version.toString()
         }
     }
 }
 
+
 tasks.whenTaskAdded {
     if (name == "generateMetadataFileForPluginShadowPublication") {
-        println(name)
         dependsOn(shadowJarTask)
     }
 }
