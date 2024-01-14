@@ -7,7 +7,7 @@ import org.gradle.api.file.FileVisitDetails
 import org.gradle.api.file.FileVisitor
 
 object Package {
-    private const val MERGE_PKG: String = "bundled.dependencies"
+    private const val MERGE_PKG: String = "__bundled.dependencies"
 
     private fun FileVisitDetails.toParentDir(): String? {
         if (relativePath.segments[0] != "META-INF") {
