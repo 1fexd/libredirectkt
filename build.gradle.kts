@@ -33,8 +33,8 @@ val shadowImplementation = configurations.create("shadowImplementation") {
 fun DependencyHandler.bundledDependency(dependencyNotation: String) {
     add("shadowImplementation", dependencyNotation)
 
-    val tag = dependencyNotation.replace(":", "_")
-    val bundled = "com.gitlab.grrfe:bundled-dependencies:$tag"
+    val (_, module, version) = dependencyNotation.split(":")
+    val bundled = "com.gitlab.grrfe.bundled-dependencies:$module:${version}"
     shadow(bundled)
 
 //    artifacts {
