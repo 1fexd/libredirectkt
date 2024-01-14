@@ -1,12 +1,11 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import fe.buildsrc.Package.relocatePackages
+import fe.buildsrc.Dependency.bundledDependency
 
 plugins {
     kotlin("jvm") version "1.9.22"
     `java-library`
     `maven-publish`
-    id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("net.nemerosa.versioning") version "3.0.0"
+    id("com.github.johnrengelman.shadow")
+    id("net.nemerosa.versioning")
 }
 
 group = "fe.libredirectkt"
@@ -23,14 +22,6 @@ val shadowImplementation = configurations.create("shadowImplementation") {
     isTransitive = false
 }
 
-fun DependencyHandler.bundledDependency(dependencyNotation: String) {
-    add("shadowImplementation", dependencyNotation)
-
-    val (_, module, version) = dependencyNotation.split(":")
-    val bundled = "com.gitlab.grrfe.bundled-dependencies:$module:${version}"
-    shadow(bundled)
-}
-
 dependencies {
     api(kotlin("stdlib"))
 
@@ -43,18 +34,6 @@ dependencies {
 
 kotlin {
     jvmToolchain(17)
-}
-
-val shadowJarTask = tasks.named<ShadowJar>("shadowJar") {
-    mergeServiceFiles()
-    exclude("META-INF/**/*")
-
-    project.relocatePackages(shadowImplementation).forEach { (from, to) ->
-        relocate(from, to)
-    }
-
-    archiveClassifier.set("")
-    configurations = listOf()
 }
 
 tasks.withType<Jar> {
@@ -73,16 +52,9 @@ publishing {
     publications {
         create<MavenPublication>("shadow") {
             shadow.component(this)
-//            from(components["java"])
 
             groupId = project.group.toString()
             version = project.version.toString()
         }
-    }
-}
-
-tasks.whenTaskAdded {
-    if (name == "generateMetadataFileForPluginShadowPublication") {
-        dependsOn(shadowJarTask)
     }
 }
