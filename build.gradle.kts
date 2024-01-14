@@ -23,27 +23,12 @@ val shadowImplementation = configurations.create("shadowImplementation") {
     isTransitive = false
 }
 
-
-//configurations {
-//    artifacts {
-//        runtimeElements(shadow.get())
-//    }
-//}
-
 fun DependencyHandler.bundledDependency(dependencyNotation: String) {
     add("shadowImplementation", dependencyNotation)
 
     val (_, module, version) = dependencyNotation.split(":")
     val bundled = "com.gitlab.grrfe.bundled-dependencies:$module:${version}"
     shadow(bundled)
-
-//    artifacts {
-//        runtimeElements("$dependencyNotation@jar")
-//    }
-//
-
-//    api(bundled)
-//    runtimeElements(bundled)
 }
 
 dependencies {
@@ -83,24 +68,6 @@ tasks.test {
 tasks.named("jar") {
     enabled = false
 }
-
-//configurations {
-//    artifacts {
-//        runtimeElements.get().forEach {
-//            println(it)
-//        }
-//        shadowImplementation.resolvedConfiguration.resolvedArtifacts.forEach {
-//            println(it)
-//        }
-
-//        runtimeElements()
-//        runtimeOnly()
-//    }
-//}
-
-//tasks.named("jar") {
-//    enabled = false
-//}
 
 publishing {
     publications {
