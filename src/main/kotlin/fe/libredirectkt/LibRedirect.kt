@@ -1,6 +1,5 @@
 package fe.libredirectkt
 
-import fe.logger.Logger
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -19,7 +18,6 @@ private val dataLatLngRegex = Regex("!3d(-?[0-9]{1,}.[0-9]{1,})!4d(-?[0-9]{1,}.[
 private val placeRegex = Regex("\\/place\\/(.*)\\/")
 
 private fun convertMapCentre(url: UriKt): Triple<String, String, String>? {
-    val logger = Logger("tets")
     url.path?.let {
         mapCentreRegex.find(it)?.groupValues?.let { groupValues ->
             val (_, lat, lon, zoom) = groupValues
