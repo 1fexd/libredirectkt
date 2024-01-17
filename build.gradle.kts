@@ -1,9 +1,10 @@
+import fe.plugin.library.LibraryConfig.Companion.library
+
 plugins {
     id("com.gitlab.grrfe.common-gradle-plugin")
 }
 
-library {
-    group.set("fe.libredirectkt")
+library("fe.libredirectkt") {
     jvm.set(17)
 }
 
