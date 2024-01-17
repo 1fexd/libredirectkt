@@ -10,7 +10,7 @@ pluginManagement {
     resolutionStrategy {
         eachPlugin {
             if (requested.id.id == "com.gitlab.grrfe.common-gradle-plugin") {
-                useModule("${requested.id.id}:library:0.0.29")
+                useModule("${requested.id.id}:library:0.0.32")
             }
         }
     }
