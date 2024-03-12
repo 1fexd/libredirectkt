@@ -1,0 +1,3 @@
+[submodule "libredirect/browser_extension"]
+	path = libredirect/browser_extension
+	url = https://github.com/1fexd/libredirect-browser_extension
