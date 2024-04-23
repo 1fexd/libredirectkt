@@ -115,11 +115,20 @@ enum class RedirectFrontend(vararg val keys: String) {
     //    Yattee("yattee"),
 //    Freetube("freetube"),
     Invidious("invidious", "piped", "pipedMaterial", "cloudtube") {
-        override fun redirect(uri: UriKt, instanceHost: String): String? {
-            if (uri.path?.startsWith("/live_chat") == true) {
-                return null
+        override fun redirect(uri: UriKt, instanceHost: String): String {
+            if (uri.host == "youtu.be" || (uri.host?.endsWith("youtube.com") == true && uri.path?.startsWith("/live") == true)) {
+                val lastSlashIdx = uri.path?.lastIndexOf('/')
+                if (lastSlashIdx != null) {
+                    val watch = uri.path?.substring(lastSlashIdx + 1)
+                    return "${instanceHost}/watch?v=${watch}"
+                }
             }
-            return "$instanceHost${uri.path}?${uri.query}";
+
+            if (uri.host?.endsWith("youtube.com") == true && uri.path?.startsWith("/redirect?") == true) {
+                return uri.toString()
+            }
+
+            return "${instanceHost}${uri.path}?${uri.query}"
         }
     },
     Poketube("poketube") {

@@ -107,6 +107,12 @@
 					"embeddable": false,
 					"instanceList": false,
 					"url": "https://github.com/MarmadileManteater/FreeTubeCordova"
+				},
+				"viewtube": {
+					"name": "ViewTube",
+					"embeddable": false,
+					"instanceList": true,
+					"url": "https://github.com/ViewTube/viewtube"
 				}
 			},
 			"targets": [
@@ -155,36 +161,6 @@
 			"imageType": "png",
 			"url": "https://music.youtube.com"
 		},
-		"twitter": {
-			"frontends": {
-				"nitter": {
-					"name": "Nitter",
-					"embeddable": true,
-					"instanceList": true,
-					"url": "https://github.com/zedeus/nitter",
-					"localhost": true
-				}
-			},
-			"targets": [
-				"^https?:\\/{2}(www\\.|mobile\\.)?twitter\\.com\\/",
-				"^https?:\\/{2}(www\\.|mobile\\.)?x\\.com\\/",
-				"^https?:\\/{2}(pbs\\.|video\\.)twimg\\.com\\/",
-				"^https?:\\/{2}platform\\.x\\.com/embed\\/",
-				"^https?:\\/{2}platform\\.twitter\\.com/embed\\/",
-				"^https?:\\/{2}t\\.co\\/"
-			],
-			"name": "Twitter",
-			"options": {
-				"enabled": false,
-				"redirectType": "main_frame",
-				"unsupportedUrls": "bypass",
-				"frontend": "nitter",
-				"instance": "public"
-			},
-			"imageType": "png",
-			"embeddable": true,
-			"url": "https://twitter.com"
-		},
 		"bluesky": {
 			"frontends": {
 				"skyview": {
@@ -211,6 +187,12 @@
 					"name": "Libreddit",
 					"instanceList": true,
 					"url": "https://github.com/spikecodes/libreddit",
+					"localhost": true
+				},
+				"redlib": {
+					"name": "Redlib",
+					"instanceList": true,
+					"url": "https://github.com/redlib-org/redlib",
 					"localhost": true
 				},
 				"teddit": {
@@ -637,7 +619,8 @@
 			},
 			"targets": [
 				"^https?:\\/{2}github\\.com\\/",
-				"^https?:\\/{2}gist\\.github\\.com\\/[^\\/]+\\/[^\\/]+\\/?"
+				"^https?:\\/{2}gist\\.github\\.com\\/[^\\/]+\\/[^\\/]+\\/?",
+				"^https?:\\/{2}raw\\.githubusercontent\\.com\\/[^\\/]+\\/[^\\/]+\\/?"
 			],
 			"name": "GitHub",
 			"options": {
@@ -680,9 +663,9 @@
 				}
 			},
 			"targets": [
-				"^https?:\\/{2}(www\\.)?stackoverflow\\.com\\/",
-				"^https?:\\/{2}([a-zA-Z0-9-]+\\.)?stackexchange\\.com\\/",
-				"^https?:\\/{2}(www\\.)?(superuser|askubuntu)\\.com\\/"
+				"^https?:\\/{2}(www\\.)?([a-zA-Z]+\\.)?stackoverflow\\.com\\/",
+				"(?!^https?:\\/{2}(api|data|blog)\\.)^https?:\\/{2}([a-zA-Z0-9-]+\\.)stackexchange\\.com\\/",
+				"^https?:\\/{2}(www\\.)?([a-zA-Z]+\\.)?(askubuntu\\.com|mathoverflow\\.net|serverfault\\.com|stackapps\\.com|superuser\\.com)\\/"
 			],
 			"name": "Stack Overflow",
 			"options": {
@@ -733,6 +716,66 @@
 			},
 			"imageType": "svg",
 			"url": "https://www.snopes.com"
+		},
+		"ifunny": {
+			"frontends": {
+				"unfunny": {
+					"name": "UNfunny",
+					"instanceList": true,
+					"url": "https://git.vern.cc/cobra/UNfunny"
+				}
+			},
+			"targets": [
+				"^https?:\\/{2}(www\\.)?ifunny\\.co\\/"
+			],
+			"name": "iFunny",
+			"options": {
+				"enabled": false,
+				"unsupportedUrls": "bypass",
+				"frontend": "unfunny"
+			},
+			"imageType": "svg",
+			"url": "https://ifunny.co"
+		},
+		"tenor": {
+			"frontends": {
+				"soprano": {
+					"name": "Soprano",
+					"instanceList": true,
+					"url": "https://git.vern.cc/cobra/Soprano"
+				}
+			},
+			"targets": [
+				"^https?:\\/{2}(www\\.)?tenor\\.com\\/"
+			],
+			"name": "Tenor",
+			"options": {
+				"enabled": false,
+				"unsupportedUrls": "bypass",
+				"frontend": "soprano"
+			},
+			"imageType": "svg",
+			"url": "https://tenor.com"
+		},
+		"knowyourmeme": {
+			"frontends": {
+				"meme": {
+					"name": "MeMe",
+					"instanceList": true,
+					"url": "https://git.vern.cc/cobra/MeMe"
+				}
+			},
+			"targets": [
+				"^https?:\\/{2}(www\\.)?knowyourmeme\\.com\\/"
+			],
+			"name": "KnowYourMeme",
+			"options": {
+				"enabled": false,
+				"unsupportedUrls": "bypass",
+				"frontend": "meme"
+			},
+			"imageType": "svg",
+			"url": "https://knowyourmeme.com"
 		},
 		"urbanDictionary": {
 			"frontends": {
@@ -879,10 +922,10 @@
 					"instanceList": true,
 					"url": "https://benbusby.com/projects/whoogle-search/"
 				},
-				"librex": {
-					"name": "LibreX",
+				"librey": {
+					"name": "LibreY",
 					"instanceList": true,
-					"url": "https://github.com/hnhx/librex"
+					"url": "https://github.com/Ahwxorg/librey/"
 				},
 				"4get": {
 					"name": "4get",
@@ -891,7 +934,8 @@
 				}
 			},
 			"targets": [
-				"^https?:\\/{2}search\\.libredirect\\.invalid"
+				"^https?:\\/{2}search\\.libredirect\\.invalid",
+				"^https?:\\/{2}libredirect\\.github\\.io\\/\\?q"
 			],
 			"name": "Search",
 			"options": {

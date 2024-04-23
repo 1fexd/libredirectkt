@@ -27,6 +27,14 @@ class MainTest {
                 LibRedirect.getDefaultInstanceForFrontend(ytService.defaultFrontend.key, instances)!!
             )
         )
+
+        assertEquals(
+            "https://invidious.fdn.fr/watch?v=V3zLnSGVdmE", LibRedirect.redirect(
+                "https://youtu.be/V3zLnSGVdmE",
+                ytService.defaultFrontend.key,
+                LibRedirect.getDefaultInstanceForFrontend(ytService.defaultFrontend.key, instances)!!
+            )
+        )
     }
 
     @Test
