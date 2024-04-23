@@ -1,15 +1,14 @@
-import fe.plugin.library.LibraryConfig.Companion.library
-
 plugins {
-    id("com.gitlab.grrfe.common-gradle-plugin")
+    kotlin("jvm") version "1.9.23" apply false
+    id("com.gitlab.grrfe.common-gradle-plugin") apply false
+    id("app.cash.zipline") version "1.9.0"
 }
 
-library("fe.libredirectkt") {
-    jvm.set(17)
+repositories {
+    google()
 }
 
-dependencies {
-    relocate("com.gitlab.grrfe:gson-ext:11.0.0")
-    relocate("com.google.code.gson:gson:2.10.1")
-    relocate("com.github.1fexd:uriparser:0.0.7")
+allprojects {
+    apply(plugin = "app.cash.zipline")
+    apply(plugin = "org.jetbrains.kotlin.jvm")
 }
