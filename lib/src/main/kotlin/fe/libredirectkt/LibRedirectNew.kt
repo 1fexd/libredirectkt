@@ -19,13 +19,13 @@ object LibRedirectNew {
     }
 }
 
-data class LibRedirectZipline(val zipline: Zipline) {
+data class LibRedirectZipline(val zipline: Zipline) : AutoCloseable {
     @OptIn(EngineApi::class)
     fun redirect(url: String, frontend: String, randomInstance: String): String? {
         return zipline.quickJs.evaluate("require('libredirect').resolve('$url', '$frontend', '$randomInstance')") as? String?
     }
 
-    fun close() {
+    override fun close() {
         zipline.close()
     }
 }
