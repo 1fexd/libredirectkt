@@ -9,13 +9,15 @@ import java.io.InputStream
 import java.util.concurrent.Executors
 
 object LibRedirectNew {
-    fun create(dispatcher: CoroutineDispatcher, stream: InputStream): LibRedirectZipline {
+    fun create(dispatcher: CoroutineDispatcher, bytes: ByteArray): LibRedirectZipline {
         val zipline = Zipline.create(dispatcher)
 
-        val bytes = stream.use { it.readBytes() }
         zipline.loadJsModule(bytes, "libredirect")
-
         return LibRedirectZipline(zipline)
+    }
+
+    fun create(dispatcher: CoroutineDispatcher, stream: InputStream): LibRedirectZipline {
+        return stream.use { create(dispatcher, it.readBytes()) }
     }
 }
 
