@@ -1,3 +1,5 @@
+rootProject.name = "libredirect"
+
 pluginManagement {
     repositories {
         mavenCentral()
@@ -15,11 +17,11 @@ pluginManagement {
     }
 
     plugins {
-        id("app.cash.zipline") version "1.8.0"
-        id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
-
+        id("app.cash.zipline") version "1.13.0"
     }
 }
 
-rootProject.name = "libredirectkt"
 include("lib", "bundler")
+
+includeBuild("../gson-ext")
+includeBuild("../uriparser")
