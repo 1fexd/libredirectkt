@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation("fe.gson.ext:core")
+    implementation("fe.gson-ext:core")
     implementation("fe.uribuilder:uriparser")
 
 //    implementation("app.cash.zipline:zipline-gradle-plugin:1.8.0") {
