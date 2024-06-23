@@ -22,6 +22,3 @@ pluginManagement {
 }
 
 include("lib", "bundler")
-
-includeBuild("../gson-ext")
-includeBuild("../uriparser")
