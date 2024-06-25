@@ -13,8 +13,9 @@ repositories {
 }
 
 dependencies {
-    implementation("com.gitlab.grrfe.gson-ext:core:16.0.0-gson2-koin3")
-    implementation("com.github.1fexd:uriparser:0.0.11")
+    api(platform("com.github.1fexd.super:platform:0.0.1"))
+    api("com.gitlab.grrfe.gson-ext:core")
+    api("com.github.1fexd:uriparser")
 
 //    implementation("app.cash.zipline:zipline-gradle-plugin:1.8.0") {
 //        isTransitive = true
