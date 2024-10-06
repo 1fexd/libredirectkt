@@ -3,10 +3,7 @@ package fe.libredirectkt
 import app.cash.zipline.EngineApi
 import app.cash.zipline.Zipline
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExecutorCoroutineDispatcher
-import kotlinx.coroutines.asCoroutineDispatcher
 import java.io.InputStream
-import java.util.concurrent.Executors
 
 object LibRedirectNew {
     fun create(dispatcher: CoroutineDispatcher, bytes: ByteArray): LibRedirectZipline {

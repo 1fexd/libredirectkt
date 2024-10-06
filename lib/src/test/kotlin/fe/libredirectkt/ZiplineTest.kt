@@ -23,7 +23,7 @@ class ZiplineTest {
         assertEquals("youtube", ytService.key)
         assertEquals("invidious", ytService.defaultFrontend.key)
         assertEquals(
-            "https://invidious.fdn.fr",
+            "https://inv.nadeko.net",
             LibRedirect.getDefaultInstanceForFrontend(ytService.defaultFrontend.key, instances)
         )
 
@@ -31,7 +31,7 @@ class ZiplineTest {
         val libRedirectZipline = LibRedirectNew.create(dispatcher, LibRedirectResource.getLibRedirect())
 
         assertEquals(
-            "https://invidious.fdn.fr/watch?v=V3zLnSGVdmE", libRedirectZipline.redirect(
+            "https://inv.nadeko.net/watch?v=V3zLnSGVdmE", libRedirectZipline.redirect(
                 "https://www.youtube.com/watch?v=V3zLnSGVdmE",
                 ytService.defaultFrontend.key,
                 LibRedirect.getDefaultInstanceForFrontend(ytService.defaultFrontend.key, instances)!!
@@ -39,7 +39,7 @@ class ZiplineTest {
         )
 
         assertEquals(
-            "https://invidious.fdn.fr/watch?v=V3zLnSGVdmE", libRedirectZipline.redirect(
+            "https://inv.nadeko.net/watch?v=V3zLnSGVdmE", libRedirectZipline.redirect(
                 "https://youtu.be/V3zLnSGVdmE",
                 ytService.defaultFrontend.key,
                 LibRedirect.getDefaultInstanceForFrontend(ytService.defaultFrontend.key, instances)!!

@@ -17,7 +17,6 @@ pluginManagement {
     }
 
     plugins {
-        id("app.cash.zipline") version "1.13.0"
     }
 }
 
