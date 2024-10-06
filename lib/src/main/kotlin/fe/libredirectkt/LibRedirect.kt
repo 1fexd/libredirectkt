@@ -554,7 +554,8 @@ object LibRedirect {
 
     fun findServiceForUrl(url: String, services: List<LibRedirectService>): LibRedirectService? {
         return services.find { service ->
-            service.targets.any { target -> target.containsMatchIn(url) }
+            // TODO: Remove temporary workaround for "search"
+            service.key != "search" && service.targets.any { target -> target.containsMatchIn(url) }
         }
     }
 
