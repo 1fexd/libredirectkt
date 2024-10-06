@@ -4,12 +4,16 @@ import {
     EmitHint,
     factory,
     forEachChild,
-    type FunctionDeclaration,
-    isArrayLiteralExpression, isObjectLiteralExpression, isPropertyAssignment,
-    isStringLiteral, isVariableDeclaration, isVariableStatement,
+    type FunctionDeclaration, ImportDeclaration, ImportSpecifier,
+    isArrayLiteralExpression,
+    isObjectLiteralExpression,
+    isPropertyAssignment,
+    isStringLiteral,
+    isVariableStatement,
     NewLineKind,
     type Node,
-    type SourceFile, type StringLiteral,
+    type SourceFile,
+    type StringLiteral,
     SyntaxKind,
     type VariableStatement
 } from "typescript";
@@ -41,7 +45,7 @@ function updateNode(node: Node, requiredName: string, sourceFile: SourceFile): F
     }
 }
 
-function extract(sourceFile: SourceFile, extractNodes: Array<[string, SyntaxKind]>): (FunctionDeclaration | VariableStatement)[] {
+export function extractNodes(sourceFile: SourceFile, extractNodes: Array<[string, SyntaxKind]>): (FunctionDeclaration | VariableStatement)[] {
     const nodes: (FunctionDeclaration | VariableStatement)[] = [];
     forEachChild(sourceFile, (node) => {
         for (let [name, kind] of extractNodes) {
@@ -57,20 +61,17 @@ function extract(sourceFile: SourceFile, extractNodes: Array<[string, SyntaxKind
     return nodes;
 }
 
-async function writeNodes(sourceFile: SourceFile, nodes: (FunctionDeclaration | VariableStatement)[], shims: string[], file: string) {
-    const printer = createPrinter({ newLine: NewLineKind.LineFeed });
-    const textNodes = nodes.map(n => printer.printNode(EmitHint.Unspecified, n, sourceFile));
-
-    await Bun.write(file, [...shims, ...textNodes].join("\n"));
-}
-
-function getSourceFileFromFile(file: string) {
+export function toSourceFile(file: string): SourceFile {
     let program = createProgram([file], { allowJs: true });
     return program.getSourceFile(file);
 }
 
-function extractDefaultInstances(node: Node | undefined) {
-    const instances: { [frontend: string]: string[] }= {}
+export function getDefaultInstancesNode(nodes: (FunctionDeclaration | VariableStatement)[]): VariableStatement {
+    return <VariableStatement>nodes.find(n => n.kind === SyntaxKind.VariableStatement)
+}
+
+export function extractDefaultInstances(node: Node | undefined) {
+    const instances: { [frontend: string]: string[] } = {}
     if (!node || !isVariableStatement(node)) return instances;
 
     const obj = node.declarationList.declarations[0].initializer;
@@ -81,11 +82,9 @@ function extractDefaultInstances(node: Node | undefined) {
                 const initializer = property.initializer;
 
                 if (isStringLiteral(name) && isArrayLiteralExpression(initializer)) {
-                    const items = initializer.elements
+                    instances[name.text] = initializer.elements
                         .filter(e => isStringLiteral(e))
                         .map(e => (e as StringLiteral).text);
-
-                    instances[name.text] = items;
                 }
             }
         }
@@ -94,23 +93,23 @@ function extractDefaultInstances(node: Node | undefined) {
     return instances;
 }
 
-const importShims = [`import { XMLHttpRequest } from "../shim/XMLHttpRequest.shim.ts";`]
+function createImportSpecifier(identifier: string): ImportSpecifier {
+    return factory.createImportSpecifier(false, undefined, factory.createIdentifier(identifier));
+}
 
-const outputDir = "src/generated";
-const sourceFile = getSourceFileFromFile("../browser_extension/src/assets/javascripts/services.js");
+export function createImport(file: string, ...identifiers: string[]): ImportDeclaration {
+    const specifiers = identifiers.map(createImportSpecifier);
+    const namedImports = factory.createNamedImports(specifiers);
 
-if (!sourceFile) {
-    console.error("Failed to create services.js");
-} else {
-    const nodes = extract(sourceFile, [
-        ["rewrite", SyntaxKind.FunctionDeclaration],
-        ["defaultInstances", SyntaxKind.VariableStatement]]
-    );
+    const clause = factory.createImportClause(false, undefined, namedImports);
+    return factory.createImportDeclaration(undefined, clause, factory.createStringLiteral(file));
+}
 
-    await writeNodes(sourceFile, nodes, importShims, `${outputDir}/services.js`);
 
-    const defaultInstancesNode = nodes.find(n => n.kind === SyntaxKind.VariableStatement);
-    const defaultInstances = extractDefaultInstances(defaultInstancesNode);
-
-    await Bun.write(`${outputDir}/defaultInstances.json`, JSON.stringify(defaultInstances));
+export function printNodes(sourceFile: SourceFile, nodes: Node[], emitLine: (line: string) => void) {
+    const printer = createPrinter({ newLine: NewLineKind.LineFeed });
+    for (const node of nodes) {
+        const line = printer.printNode(EmitHint.Unspecified, node, sourceFile);
+        emitLine(line);
+    }
 }
