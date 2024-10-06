@@ -6,6 +6,30 @@ import kotlin.test.assertNotNull
 
 class MainTest {
     @Test
+    fun testInstagram() {
+        val services = LibRedirectLoader.loadBuiltInServices()
+        val instances = LibRedirectLoader.loadBuiltInInstances()
+
+        val instagramService = LibRedirect.findServiceForUrl("https://www.instagram.com/p/DAtQDJFPtfi", services)
+        assertNotNull(instagramService)
+        assertNotNull(instagramService.defaultFrontend)
+        assertEquals("instagram", instagramService.key)
+        assertEquals("proxigram", instagramService.defaultFrontend.key)
+        assertEquals(
+            "https://ig.opnxng.com",
+            LibRedirect.getDefaultInstanceForFrontend(instagramService.defaultFrontend.key, instances)
+        )
+
+        assertEquals(
+            "https://ig.opnxng.com/p/DAtQDJFPtfi", LibRedirect.redirect(
+                "https://www.instagram.com/p/DAtQDJFPtfi",
+                instagramService.defaultFrontend.key,
+                LibRedirect.getDefaultInstanceForFrontend(instagramService.defaultFrontend.key, instances)!!
+            )
+        )
+    }
+
+    @Test
     fun testYoutube() {
         val services = LibRedirectLoader.loadBuiltInServices()
         val instances = LibRedirectLoader.loadBuiltInInstances()

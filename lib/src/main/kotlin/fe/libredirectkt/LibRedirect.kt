@@ -502,7 +502,7 @@ enum class RedirectFrontend(vararg val keys: String) {
     abstract fun redirect(uri: UriKt, instanceHost: String): String?
 
     companion object {
-        fun findFrontendByKey(key: String) = RedirectFrontend.values().find { it.keys.contains(key) }
+        fun findFrontendByKey(key: String) = entries.find { it.keys.contains(key) }
     }
 }
 
@@ -549,7 +549,13 @@ object LibRedirect {
     )
 
     fun redirect(url: String, frontendKey: String, instance: String): String? {
-        return RedirectFrontend.findFrontendByKey(frontendKey)?.redirect(UriKt(url), instance)
+        val uri = UriKt(url)
+        val frontend = RedirectFrontend.findFrontendByKey(frontendKey)
+        if(frontend != null){
+            return frontend.redirect(uri, instance)
+        }
+
+        return "${instance}${uri.path}${uri.queryString}"
     }
 
     fun findServiceForUrl(url: String, services: List<LibRedirectService>): LibRedirectService? {
