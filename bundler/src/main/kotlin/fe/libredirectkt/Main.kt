@@ -10,22 +10,22 @@ import kotlin.io.path.*
 
 
 @OptIn(EngineApi::class)
-fun main() {
+fun main(args: Array<String>) {
+    if(args.size != 1) error("No root directory path given!")
+    val rootDir = Path(args[0])
+
     val homeDir = Path(System.getProperty("user.home"))
     val bun = homeDir / ".bun" / "bin" / "bun"
 
-    val libredirectDir = Path("libredirect")
+    val libredirectDir = rootDir / "libredirect"
     val distDir = libredirectDir / "dist"
     extractExtension(bun, libredirectDir, distDir)
 
     val executor = Executors.newSingleThreadExecutor { Thread(it, "Zipline") }
     val zipline = Zipline.create(executor.asCoroutineDispatcher())
 
-    val script = distDir / "index.js"
-    val libredirect = zipline.quickJs.compile(script.readText(), "libredirect")
-
-    val outputFile = Path("lib", "src", "main", "resources", "libredirect.zipline")
-    outputFile.writeBytes(libredirect)
+    val libredirect = zipline.quickJs.compile((distDir / "index.js").readText(), "libredirect")
+    (rootDir / "lib" / "src" / "main" / "resources" / "libredirect.zipline").writeBytes(libredirect)
 }
 
 fun extractExtension(bun: Path, dir: Path, distDir: Path) {
@@ -34,7 +34,14 @@ fun extractExtension(bun: Path, dir: Path, distDir: Path) {
         error("Extraction failed: $runExitCode")
     }
 
-    val buildExitCode = launchProcess(bun.pathString, "build", (dir / "api" / "src" / "index.ts").pathString, "--outdir", distDir.pathString, "--minify")
+    val buildExitCode = launchProcess(
+        bun.pathString,
+        "build",
+        (dir / "api" / "src" / "index.ts").pathString,
+        "--outdir",
+        distDir.pathString,
+        "--minify"
+    )
     if (buildExitCode != 0) {
         error("Build failed: $buildExitCode")
     }
