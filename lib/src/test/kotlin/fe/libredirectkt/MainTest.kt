@@ -16,12 +16,12 @@ class MainTest {
         assertEquals("youtube", ytService.key)
         assertEquals("invidious", ytService.defaultFrontend.key)
         assertEquals(
-            "https://invidious.fdn.fr",
+            "https://inv.nadeko.net",
             LibRedirect.getDefaultInstanceForFrontend(ytService.defaultFrontend.key, instances)
         )
 
         assertEquals(
-            "https://invidious.fdn.fr/watch?v=V3zLnSGVdmE", LibRedirect.redirect(
+            "https://inv.nadeko.net/watch?v=V3zLnSGVdmE", LibRedirect.redirect(
                 "https://www.youtube.com/watch?v=V3zLnSGVdmE",
                 ytService.defaultFrontend.key,
                 LibRedirect.getDefaultInstanceForFrontend(ytService.defaultFrontend.key, instances)!!
@@ -29,7 +29,7 @@ class MainTest {
         )
 
         assertEquals(
-            "https://invidious.fdn.fr/watch?v=V3zLnSGVdmE", LibRedirect.redirect(
+            "https://inv.nadeko.net/watch?v=V3zLnSGVdmE", LibRedirect.redirect(
                 "https://youtu.be/V3zLnSGVdmE",
                 ytService.defaultFrontend.key,
                 LibRedirect.getDefaultInstanceForFrontend(ytService.defaultFrontend.key, instances)!!
@@ -48,11 +48,11 @@ class MainTest {
         assertEquals("twitter", twitterService.key)
         assertEquals("nitter", twitterService.defaultFrontend.key)
         assertEquals(
-            "https://nitter:nitter@nitter.nixnet.services",
+            "https://xcancel.com",
             LibRedirect.getDefaultInstanceForFrontend(twitterService.defaultFrontend.key, instances)
         )
         assertEquals(
-            "https://nitter:nitter@nitter.nixnet.services/MishaalRahman/status/1633529635253174274#m", LibRedirect.redirect(
+            "https://xcancel.com/MishaalRahman/status/1633529635253174274#m", LibRedirect.redirect(
                 "https://twitter.com/MishaalRahman/status/1633529635253174274",
                 twitterService.defaultFrontend.key,
                 LibRedirect.getDefaultInstanceForFrontend(twitterService.defaultFrontend.key, instances)!!
