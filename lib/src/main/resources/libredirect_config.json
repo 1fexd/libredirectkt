@@ -57,10 +57,10 @@
             2,
             3
           ],
-          "name": "PokeTube",
+          "name": "Poke",
           "embeddable": true,
           "instanceList": true,
-          "url": "https://codeberg.org/Ashley/poketube"
+          "url": "https://codeberg.org/ashley/poke"
         },
         "cloudtube": {
           "name": "CloudTube",
@@ -218,6 +218,25 @@
       "imageType": "svg",
       "embeddable": true,
       "url": "https://twitter.com"
+    },
+    "chatGpt": {
+      "frontends": {
+        "duckDuckGoAiChat": {
+          "name": "DuckDuckGo AI Chat",
+          "instanceList": false,
+          "url": "https://duckduckgo.com/duckduckgo-help-pages/aichat/"
+        }
+      },
+      "targets": ["^https?:\\/{2}chatgpt\\.com"],
+      "name": "ChatGPT",
+      "options": {
+        "enabled": false,
+        "unsupportedUrls": "bypass",
+        "frontend": "duckDuckGoAiChat",
+        "redirectOnlyInIncognito": false
+      },
+      "imageType": "svgMono",
+      "url": "https://chatgpt.com/"
     },
     "bluesky": {
       "frontends": {
@@ -753,7 +772,7 @@
       },
       "targets": [
         "^https?:\\/{2}(www\\.)?([a-zA-Z]+\\.)?stackoverflow\\.com\\/",
-        "(?!^https?:\\/{2}(api|data|blog)\\.)^https?:\\/{2}([a-zA-Z0-9-]+\\.)stackexchange\\.com\\/",
+        "^https?:\\/{2}((?!(api|data|blog)\\.)[a-zA-Z0-9-]+\\.(meta\\.)?)?stackexchange\\.com\\/",
         "^https?:\\/{2}(www\\.)?([a-zA-Z]+\\.)?(askubuntu\\.com|mathoverflow\\.net|serverfault\\.com|stackapps\\.com|superuser\\.com)\\/"
       ],
       "name": "Stack Overflow",
@@ -1299,7 +1318,7 @@
         "skunkyArt": {
           "name": "SkunkyArt",
           "instanceList": true,
-          "url": "https://git.sr.ht/~nixgoat/shoelace"
+          "url": "https://codeberg.org/skunky/skunkyart"
         }
       },
       "targets": [
