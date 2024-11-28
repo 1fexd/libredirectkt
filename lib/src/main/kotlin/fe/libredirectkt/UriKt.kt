@@ -9,14 +9,15 @@ class UriKt(str: String) {
         get() = uri.host
     val path: String?
         get() = uri.path
-    val query: String?
-        get() = uri.query
+
+    val hasQuery: Boolean
+        get() = uri.query != null
 
     val queryString: String
         get() = uri.query?.let { "?$it" } ?: ""
 
     val splitQuery: MutableMap<String, String> by lazy {
-        query?.split("&")?.mapNotNull {
+        uri.query?.split("&")?.mapNotNull {
             with(it.split("=")) {
                 if (this.size == 2) {
                     this[0] to this[1]

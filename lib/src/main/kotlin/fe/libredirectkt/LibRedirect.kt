@@ -38,7 +38,7 @@ private fun convertMapCentre(url: UriKt): Triple<String, String, String>? {
 enum class RedirectFrontend(vararg val keys: String) {
     Beatbump("beatbump") {
         override fun redirect(uri: UriKt, instanceHost: String): String {
-            return "$instanceHost${uri.path}?${uri.query}"
+            return "$instanceHost${uri.path}${uri.queryString}"
                 .replace("/watch?v=", "/listen?id=")
                 .replace("/channel/", "/artist/")
                 .replace("/playlist?list=", "/playlist/VL")
@@ -52,7 +52,7 @@ enum class RedirectFrontend(vararg val keys: String) {
     },
     Hyperpipe("hyperpipe") {
         override fun redirect(uri: UriKt, instanceHost: String): String {
-            return "$instanceHost${uri.path}?${uri.query}".replace(Regex("\\/search\\?q=.*")) { result ->
+            return "$instanceHost${uri.path}${uri.queryString}".replace(Regex("\\/search\\?q=.*")) { result ->
                 result.groupValues[0].replace(
                     "?q=",
                     "/"
@@ -64,18 +64,18 @@ enum class RedirectFrontend(vararg val keys: String) {
     //    LbryDesktop("lbryDesktop")
     Searx("searx", "searxng") {
         override fun redirect(uri: UriKt, instanceHost: String): String {
-            return "$instanceHost/?${uri.query}"
+            return "$instanceHost/${uri.queryString}"
         }
     },
     Whoogle("whoogle") {
         override fun redirect(uri: UriKt, instanceHost: String): String {
-            return "$instanceHost/search?${uri.query}"
+            return "$instanceHost/search${uri.queryString}"
         }
 
     },
     Librex("librex") {
         override fun redirect(uri: UriKt, instanceHost: String): String {
-            return "${instanceHost}/search.php?${uri.query}"
+            return "${instanceHost}/search.php${uri.queryString}"
         }
     },
 
@@ -128,7 +128,7 @@ enum class RedirectFrontend(vararg val keys: String) {
                 return uri.toString()
             }
 
-            return "${instanceHost}${uri.path}?${uri.query}"
+            return "${instanceHost}${uri.path}${uri.queryString}"
         }
     },
     Poketube("poketube") {
@@ -141,7 +141,7 @@ enum class RedirectFrontend(vararg val keys: String) {
 
                 if (match != null) {
                     val id = match.groupValues[1]
-                    return "${instanceHost}/channel?id=${id}?${uri.query}"
+                    return "${instanceHost}/channel?id=${id}${uri.queryString}"
                 }
             }
 
@@ -149,7 +149,7 @@ enum class RedirectFrontend(vararg val keys: String) {
                 return instanceHost
             }
 
-            return "$instanceHost${uri.path}?${uri.query}"
+            return "$instanceHost${uri.path}${uri.queryString}"
         }
     },
     Scribe("scribe") {
@@ -158,25 +158,25 @@ enum class RedirectFrontend(vararg val keys: String) {
             if (result != null && result.size > 2) {
                 val subdomain = result[1]
                 if (subdomain != "link" || !subdomain.startsWith("cdn-images")) {
-                    return "${instanceHost}/@${subdomain}${uri.path}?${uri.query}"
+                    return "${instanceHost}/@${subdomain}${uri.path}${uri.queryString}"
                 }
             }
 
-            return "${instanceHost}${uri.path}?${uri.query}"
+            return "${instanceHost}${uri.path}${uri.queryString}"
         }
     },
     SimplyTranslate("simplyTranslate") {
         override fun redirect(uri: UriKt, instanceHost: String): String {
-            return "$instanceHost/?${uri.query}"
+            return "$instanceHost/${uri.queryString}"
         }
     },
     LibreTranslate("libreTranslate") {
         override fun redirect(uri: UriKt, instanceHost: String): String {
-            val query = uri.query
-                ?.replace("sl", "source")
-                ?.replace("tl", "target")
-                ?.replace("text", "q")
-            return "$instanceHost/?${query}"
+            val query = uri.queryString
+                .replace("sl", "source")
+                .replace("tl", "target")
+                .replace("text", "q")
+            return "$instanceHost/${query}"
         }
 
     },
@@ -318,20 +318,20 @@ enum class RedirectFrontend(vararg val keys: String) {
     Rimgo("rimgo") {
         override fun redirect(uri: UriKt, instanceHost: String): String? {
             if (Regex("^https?:\\/{2}(?:[im]\\.)?stack\\.").containsMatchIn(uri.toString())) {
-                return "$instanceHost/stack${uri.path}?${uri.query}"
+                return "$instanceHost/stack${uri.path}${uri.queryString}"
             }
 
-            return "$instanceHost${uri.path}?${uri.query}"
+            return "$instanceHost${uri.path}${uri.queryString}"
         }
     },
     LibReddit("libreddit") {
         override fun redirect(uri: UriKt, instanceHost: String): String? {
             val result = uri.host?.let { Regex("^(?:(?:external-)?preview|i)(?=\\.redd\\.it)").find(it) }
-                ?: return "$instanceHost${uri.path}?${uri.query}"
+                ?: return "$instanceHost${uri.path}${uri.queryString}"
 
             return when (result.groupValues[1]) {
-                "preview" -> "$instanceHost/preview/pre${uri.path}?${uri.query}"
-                "external-preview" -> "$instanceHost/preview/external-pre${uri.path}?${uri.query}"
+                "preview" -> "$instanceHost/preview/pre${uri.path}${uri.queryString}"
+                "external-preview" -> "$instanceHost/preview/external-pre${uri.path}${uri.queryString}"
                 "i" -> "$instanceHost/img${uri.path}"
                 else -> null
             }
@@ -340,14 +340,14 @@ enum class RedirectFrontend(vararg val keys: String) {
     Teddit("teddit") {
         override fun redirect(uri: UriKt, instanceHost: String): String? {
             if (uri.host?.let { Regex("^(?:(?:external-)?preview|i)\\.redd\\.it").containsMatchIn(it) } == true) {
-                if (uri.query == null) {
+                if (!uri.hasQuery) {
                     return "$instanceHost${uri.path}?teddit_proxy=${uri.host}"
                 }
 
-                return "$instanceHost${uri.path}?${uri.query}&teddit_proxy=${uri.host}"
+                return "$instanceHost${uri.path}${uri.queryString}&teddit_proxy=${uri.host}"
             }
 
-            return "$instanceHost${uri.path}?${uri.query}"
+            return "$instanceHost${uri.path}${uri.queryString}"
         }
     },
     Neuters("neuters") {
@@ -376,21 +376,21 @@ enum class RedirectFrontend(vararg val keys: String) {
     RuralDictionary("ruralDictionary") {
         override fun redirect(uri: UriKt, instanceHost: String): String? {
             if (uri.path?.contains("/define.php") == false && uri.path?.contains("/random.php") == false && uri.path != "/") return null
-            return "${instanceHost}${uri.path}?${uri.query}"
+            return "${instanceHost}${uri.path}${uri.queryString}"
         }
     },
     AnonymousOverflow("anonymousOverflow") {
         override fun redirect(uri: UriKt, instanceHost: String): String? {
             if (uri.path?.startsWith("/questions") == false && uri.path != "/") return null
             val threadID = Regex("\\/(\\d+)\\/?\$").find(uri.path!!)?.groupValues
-            if (threadID != null) return "${instanceHost}/questions/${threadID[1]}?${uri.query}"
-            return "${instanceHost}${uri.path}?${uri.query}"
+            if (threadID != null) return "${instanceHost}/questions/${threadID[1]}${uri.queryString}"
+            return "${instanceHost}${uri.path}${uri.queryString}"
         }
     },
     BiblioReads("biblioReads") {
         override fun redirect(uri: UriKt, instanceHost: String): String? {
             if (uri.path?.startsWith("/book/show/") == false && uri.path != "/") return null
-            return "${instanceHost}${uri.path}?${uri.query}"
+            return "${instanceHost}${uri.path}${uri.queryString}"
         }
     },
     WikiLess("wikiless") {
@@ -415,7 +415,7 @@ enum class RedirectFrontend(vararg val keys: String) {
     ProxiTok("proxiTok") {
         override fun redirect(uri: UriKt, instanceHost: String): String? {
             if (uri.path?.startsWith("/email") == true) return null
-            return "$instanceHost${uri.path}?${uri.query}"
+            return "$instanceHost${uri.path}${uri.queryString}"
         }
     },
     WayBackClassic("waybackClassic") {
@@ -439,16 +439,16 @@ enum class RedirectFrontend(vararg val keys: String) {
                 val path = regex[4]
                 return "$instanceHost/file/${user}/${repo}/${branch}/${path}"
             }
-            return "$instanceHost${uri.path}?${uri.query}"
+            return "$instanceHost${uri.path}${uri.queryString}"
         }
     },
     MikuInvidious("mikuInvidious") {
         override fun redirect(uri: UriKt, instanceHost: String): String? {
             if (uri.host == "bilibili.com" || uri.host == "www.bilibili.com" || uri.host == "b23.tv") {
-                return "${instanceHost}${uri.path}?${uri.query}"
+                return "${instanceHost}${uri.path}${uri.queryString}"
             }
             if (uri.host == "space.bilibili.com") {
-                return "${instanceHost}/space${uri.path}?${uri.query}"
+                return "${instanceHost}/space${uri.path}${uri.queryString}"
             }
 
             return null
