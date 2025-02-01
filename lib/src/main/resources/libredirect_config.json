@@ -82,7 +82,7 @@
           "name": "Tubo",
           "embeddable": false,
           "instanceList": true,
-          "url": "https://git.migalmoreno.com/tubo/about/",
+          "url": "https://github.com/migalmoreno/tubo",
           "excludeTargets": [
             2,
             3
@@ -122,7 +122,7 @@
         },
         "viewtube": {
           "name": "ViewTube",
-          "embeddable": false,
+          "embeddable": true,
           "instanceList": true,
           "url": "https://github.com/ViewTube/viewtube"
         },
@@ -284,6 +284,12 @@
           "instanceList": true,
           "url": "https://github.com/corenting/eddrit",
           "localhost": false
+        },
+        "troddit": {
+          "name": "Troddit",
+          "instanceList": false,
+          "url": "https://github.com/burhan-syed/troddit",
+          "localhost": false
         }
       },
       "targets": [
@@ -369,6 +375,12 @@
           "instanceList": true,
           "url": "https://github.com/pablouser1/ProxiTok",
           "localhost": true
+        },
+        "offtiktok": {
+          "name": "Offtiktok",
+          "instanceList": true,
+          "url": "https://github.com/MarsHeer/offtiktok",
+          "localhost": false
         }
       },
       "targets": [
@@ -465,6 +477,11 @@
           "name": "LiteXiv",
           "instanceList": true,
           "url": "https://codeberg.org/Peaksol/LiteXiv"
+        },
+        "vixipy": {
+          "name": "Vixipy",
+          "instanceList": true,
+          "url": "https://codeberg.org/vixipy/Vixipy"
         }
       },
       "targets": [
@@ -535,6 +552,12 @@
           "instanceList": true,
           "url": "https://github.com/Ahwxorg/Binternet",
           "embeddable": true
+        },
+        "painterest": {
+          "name": "Painterest",
+          "instanceList": true,
+          "url": "https://codeberg.org/thirtysix/painterest",
+          "embeddable": true
         }
       },
       "targets": [
@@ -558,7 +581,13 @@
           "name": "Tubo",
           "embeddable": false,
           "instanceList": true,
-          "url": "https://git.migalmoreno.com/tubo/about/"
+          "url": "https://github.com/migalmoreno/tubo"
+        },
+        "soundcloak": {
+          "name": "soundcloak",
+          "embeddable": false,
+          "instanceList": true,
+          "url": "https://git.maid.zone/stuff/soundcloak"
         }
       },
       "targets": [
@@ -659,6 +688,11 @@
           "name": "LibMedium",
           "instanceList": true,
           "url": "https://github.com/realaravinth/libmedium"
+        },
+        "small": {
+          "name": "Small",
+          "instanceList": true,
+          "url": "https://git.private.coffee/PrivateCoffee/small"
         }
       },
       "targets": [
@@ -959,15 +993,20 @@
     "instructables": {
       "name": "Instructables",
       "frontends": {
-        "indestructables": {
-          "name": "Indestructables",
+        "structables": {
+          "name": "Structables",
           "instanceList": true,
-          "url": "https://indestructables.codeberg.page"
+          "url": "https://github.com/PrivateCoffee/structables"
         },
         "destructables": {
           "name": "Destructables",
           "instanceList": true,
           "url": "https://git.vern.cc/cobra/Destructables"
+        },
+        "indestructables": {
+          "name": "Indestructables",
+          "instanceList": true,
+          "url": "https://indestructables.codeberg.page"
         }
       },
       "targets": [
@@ -976,7 +1015,7 @@
       "options": {
         "enabled": false,
         "unsupportedUrls": "bypass",
-        "frontend": "indestructables",
+        "frontend": "structables",
         "redirectOnlyInIncognito": false
       },
       "imageType": "svg",
@@ -988,6 +1027,11 @@
           "name": "Wikiless",
           "instanceList": true,
           "url": "https://wikiless.org"
+        },
+        "wikimore": {
+          "name": "Wikimore",
+          "instanceList": true,
+          "url": "https://git.private.coffee/privatecoffee/wikimore"
         }
       },
       "targets": [
@@ -1235,6 +1279,11 @@
           "name": "Pasted",
           "instanceList": true,
           "url": "https://github.com/Dragynfruit/pasted"
+        },
+        "pasty": {
+          "name": "Pasty",
+          "instanceList": true,
+          "url": "https://github.com/lus/pasty"
         }
       },
       "targets": [
@@ -1256,6 +1305,11 @@
           "name": "Freetar",
           "instanceList": true,
           "url": "https://github.com/kmille/freetar"
+        },
+        "ultimateTab": {
+          "name": "Ultimate Tab",
+          "instanceList": false,
+          "url": "https://github.com/BenoitBellegarde/UltimateTab"
         }
       },
       "targets": [
@@ -1340,6 +1394,11 @@
           "name": "NerdsforNerds",
           "instanceList": true,
           "url": "https://git.vern.cc/cobra/NerdsforNerds"
+        },
+        "ducksForDucks": {
+          "name": "Ducks for Ducks",
+          "instanceList": true,
+          "url": "https://git.private.coffee/PrivateCoffee/ducksforducks"
         }
       },
       "targets": [
@@ -1375,6 +1434,27 @@
       },
       "imageType": "svg",
       "url": "https://coub.com"
+    },
+    "chefkoch": {
+      "frontends": {
+        "gocook": {
+          "name": "GoCook",
+          "instanceList": true,
+          "url": "https://github.com/NoUmlautsAllowed/gocook"
+        }
+      },
+      "targets": [
+        "^https?:\\/{2}(www\\.)?chefkoch\\.de"
+      ],
+      "name": "Chefkoch",
+      "options": {
+        "enabled": false,
+        "unsupportedUrls": "bypass",
+        "frontend": "gocook",
+        "redirectOnlyInIncognito": false
+      },
+      "imageType": "svg",
+      "url": "https://www.chefkoch.de"
     }
   }
 }
