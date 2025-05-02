@@ -18,7 +18,7 @@ fun main(args: Array<String>) {
 
     val libredirectDir = rootDir / "libredirect"
     val distDir = libredirectDir / "dist"
-    extractExtension(bun, libredirectDir, distDir)
+//    extractExtension(bun, libredirectDir, distDir)
 
     val executor = Executors.newSingleThreadExecutor { Thread(it, "Zipline") }
     val zipline = Zipline.create(executor.asCoroutineDispatcher())
