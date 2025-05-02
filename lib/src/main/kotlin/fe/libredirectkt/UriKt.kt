@@ -2,21 +2,21 @@ package fe.libredirectkt
 
 import java.net.URI
 
-class UriKt(str: String) {
+public class UriKt(str: String) {
     private val uri = URI(str)
 
-    val host: String?
+    public val host: String?
         get() = uri.host
-    val path: String?
+    public val path: String?
         get() = uri.path
 
-    val hasQuery: Boolean
+    public val hasQuery: Boolean
         get() = uri.query != null
 
-    val queryString: String
+    public val queryString: String
         get() = uri.query?.let { "?$it" } ?: ""
 
-    val splitQuery: MutableMap<String, String> by lazy {
+    public val splitQuery: MutableMap<String, String> by lazy {
         uri.query?.split("&")?.mapNotNull {
             with(it.split("=")) {
                 if (this.size == 2) {
@@ -26,6 +26,6 @@ class UriKt(str: String) {
         }?.toMap()?.toMutableMap() ?: mutableMapOf()
     }
 
-    val fragment: String?
+    public val fragment: String?
         get() = uri.fragment
 }

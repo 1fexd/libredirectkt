@@ -13,7 +13,7 @@ source_path = os.path.join(libredirectkt, "lib", "src", "main", "kotlin")
 
 with open_file(os.path.join(source_path, "LibRedirectMetadata.kt")) as fw:
     fw.write_multiline(f"""
-        object LibRedirectMetadata {{
-            const val fetchedAt = {now}L
+        public object LibRedirectMetadata {{
+            public const val fetchedAt: Long = {now}L
         }}
     """)

@@ -1,23 +1,19 @@
-import fe.plugin.library.LibraryConfig.Companion.library
-
-plugins {
-    id("com.gitlab.grrfe.common-gradle-plugin")
-}
-
-project.library("fe.libredirectkt") {
-    jvm.set(17)
-}
-
-repositories {
-    google()
-}
+import fe.build.dependencies.Grrfe
 
 dependencies {
-    api(platform("com.github.1fexd:super:0.0.5"))
-    api("com.gitlab.grrfe.gson-ext:core")
-    api("com.github.1fexd:uriparser")
+    implementation(platform(Grrfe.std.bom))
+    implementation(Grrfe.std.core)
+    implementation(platform(Grrfe.httpkt.bom))
+    implementation(Grrfe.httpkt.core2.core)
+    implementation(Grrfe.httpkt.serialization.gson)
 
+    implementation(platform(Grrfe.gsonExt.bom))
+    implementation(Grrfe.gsonExt.core)
     implementation("app.cash.zipline:zipline:1.17.0") {
         isTransitive = true
     }
+
+    testImplementation(KotlinX.coroutines.test)
+    testImplementation("com.willowtreeapps.assertk:assertk:_")
+    testImplementation(kotlin("test"))
 }

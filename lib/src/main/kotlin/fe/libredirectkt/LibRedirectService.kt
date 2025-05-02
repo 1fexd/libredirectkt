@@ -1,6 +1,6 @@
 package fe.libredirectkt
 
-data class LibRedirectService(
+ public data class LibRedirectService(
     val key: String,
     val name: String,
     val url: String,
@@ -9,7 +9,7 @@ data class LibRedirectService(
     val targets: List<Regex>
 )
 
-data class LibRedirectFrontend(
+ public data class LibRedirectFrontend(
     val key: String,
     val name: String,
     val excludeTargets: List<String>,

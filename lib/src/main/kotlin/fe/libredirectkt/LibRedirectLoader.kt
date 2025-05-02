@@ -9,28 +9,30 @@ import fe.gson.extension.json.`object`.*
 import fe.gson.util.Json
 import java.io.InputStream
 
-object LibRedirectLoader {
-    fun loadBuiltInServices() =
-        loadLibRedirectServices(loadLibRedirectJson(LibRedirectResource.getBuiltInLibRedirectConfigJson()!!))
+public object LibRedirectLoader {
+    public fun loadBuiltInServices(): List<LibRedirectService> {
+        return loadLibRedirectServices(loadLibRedirectJson(LibRedirectResource.getBuiltInLibRedirectConfigJson()!!))
+    }
 
-    fun loadBuiltInInstances() =
-        loadLibRedirectInstances(loadLibRedirectJson(LibRedirectResource.getBuiltInLibRedirectInstancesJson()!!))
+    public fun loadBuiltInInstances(): List<LibRedirectInstance> {
+        return loadLibRedirectInstances(loadLibRedirectJson(LibRedirectResource.getBuiltInLibRedirectInstancesJson()!!))
+    }
 
-    fun loadLibRedirectJson(inputStream: InputStream): JsonElement {
+    public fun loadLibRedirectJson(inputStream: InputStream): JsonElement {
         return inputStream.fromJson<JsonElement>()
     }
 
-    fun loadLibRedirectJson(text: String): JsonElement {
+    public fun loadLibRedirectJson(text: String): JsonElement {
         return Json.fromJson<JsonElement>(text)
     }
 
-    fun loadLibRedirectInstances(obj: JsonElement): List<LibRedirectInstance> {
+    public fun loadLibRedirectInstances(obj: JsonElement): List<LibRedirectInstance> {
         return obj.asJsonObject.map { it.asJsonObject }.map { (key, instanceObj) ->
             LibRedirectInstance(key, instanceObj.asArray("clearnet").strings())
         }
     }
 
-    fun loadLibRedirectServices(elem: JsonElement): List<LibRedirectService> {
+    public fun loadLibRedirectServices(elem: JsonElement): List<LibRedirectService> {
         val obj = elem.asJsonObject
         val services = obj.getAsJsonObject("services")
 

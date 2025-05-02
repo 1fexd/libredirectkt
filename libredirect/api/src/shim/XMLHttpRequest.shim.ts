@@ -6,5 +6,5 @@ export class XMLHttpRequest {
     }
 
     public status = 200;
-    public responseText = "{]";
+    public responseText = "{}";
 }

@@ -3,7 +3,7 @@ package fe.libredirectkt
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
-fun Map<String, String?>.makeQuery(): String {
+public fun Map<String, String?>.makeQuery(): String {
     return this.map {
         if (it.value != null) {
             "${it.key}=${it.value}"
@@ -35,7 +35,7 @@ private fun convertMapCentre(url: UriKt): Triple<String, String, String>? {
 }
 
 // browser_extension/src/assets/javascripts
-enum class RedirectFrontend(vararg val keys: String) {
+public enum class RedirectFrontend(public vararg val keys: String) {
     Beatbump("beatbump") {
         override fun redirect(uri: UriKt, instanceHost: String): String {
             return "$instanceHost${uri.path}${uri.queryString}"
@@ -265,7 +265,7 @@ enum class RedirectFrontend(vararg val keys: String) {
                 } else if (uri.splitQuery.containsKey("query")) {
                     uri.splitQuery["query"]!!
                 } else if (uri.splitQuery.containsKey("pb")) {
-                    kotlin.runCatching { uri.splitQuery["pb"]!!.split(Regex("!2s(.*?)!"))[1] }.getOrNull()
+                    runCatching { uri.splitQuery["pb"]!!.split(Regex("!2s(.*?)!"))[1] }.getOrNull()
                 } else null
 
                 return "$instanceHost/#q=$query"
@@ -499,14 +499,14 @@ enum class RedirectFrontend(vararg val keys: String) {
         }
     };
 
-    abstract fun redirect(uri: UriKt, instanceHost: String): String?
+    public abstract fun redirect(uri: UriKt, instanceHost: String): String?
 
-    companion object {
-        fun findFrontendByKey(key: String) = entries.find { it.keys.contains(key) }
+    public companion object {
+        public fun findFrontendByKey(key: String): RedirectFrontend? = entries.find { it.keys.contains(key) }
     }
 }
 
-object LibRedirect {
+public object LibRedirect {
     private val defaultInstances = mapOf(
         "invidious" to listOf("https://inv.vern.cc"),
         "piped" to listOf("https://pipedapi-libre.kavin.rocks"),
@@ -548,7 +548,7 @@ object LibRedirect {
         "jitsi" to listOf("https://meet.jit.si", "https://8x8.vc"),
     )
 
-    fun redirect(url: String, frontendKey: String, instance: String): String? {
+    public fun redirect(url: String, frontendKey: String, instance: String): String? {
         val uri = UriKt(url)
         val frontend = RedirectFrontend.findFrontendByKey(frontendKey)
         if(frontend != null){
@@ -558,14 +558,14 @@ object LibRedirect {
         return "${instance}${uri.path}${uri.queryString}"
     }
 
-    fun findServiceForUrl(url: String, services: List<LibRedirectService>): LibRedirectService? {
+    public fun findServiceForUrl(url: String, services: List<LibRedirectService>): LibRedirectService? {
         return services.find { service ->
             // TODO: Remove temporary workaround for "search"
             service.key != "search" && service.targets.any { target -> target.containsMatchIn(url) }
         }
     }
 
-    fun getDefaultInstanceForFrontend(frontendKey: String, instances: List<LibRedirectInstance>): String? {
+    public fun getDefaultInstanceForFrontend(frontendKey: String, instances: List<LibRedirectInstance>): String? {
         return instances.find { it.frontendKey == frontendKey }?.hosts?.firstOrNull()
     }
 }
