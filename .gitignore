@@ -8,3 +8,5 @@ node_modules
 libredirect/api/src/generated
 dist
 .venv
+.kotlin
+local.properties

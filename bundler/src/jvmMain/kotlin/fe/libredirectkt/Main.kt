@@ -2,7 +2,6 @@ package fe.libredirectkt
 
 import app.cash.zipline.EngineApi
 import app.cash.zipline.Zipline
-import fe.process.launchProcess
 import kotlinx.coroutines.asCoroutineDispatcher
 import java.nio.file.Path
 import java.util.concurrent.Executors
@@ -11,7 +10,7 @@ import kotlin.io.path.*
 
 @OptIn(EngineApi::class)
 fun main(args: Array<String>) {
-    if(args.size != 1) error("No root directory path given!")
+    if (args.size != 1) error("No root directory path given!")
     val rootDir = Path(args[0])
 
     val homeDir = Path(System.getProperty("user.home"))
@@ -29,20 +28,24 @@ fun main(args: Array<String>) {
 }
 
 fun extractExtension(bun: Path, dir: Path, distDir: Path) {
-    val runExitCode = launchProcess(bun.pathString, "run", (dir / "api" / "main.ts").pathString)
-    if (runExitCode != 0) {
-        error("Extraction failed: $runExitCode")
-    }
-
-    val buildExitCode = launchProcess(
-        bun.pathString,
-        "build",
-        (dir / "api" / "src" / "index.ts").pathString,
-        "--outdir",
-        distDir.pathString,
-        "--minify"
-    )
-    if (buildExitCode != 0) {
-        error("Build failed: $buildExitCode")
-    }
+//    val runExitCode =
+//        launchProcess(args = arrayOf(bun.pathString, "run", (dir / "api" / "main.ts").pathString), config = Standalone)
+//    if (runExitCode != 0) {
+//        error("Extraction failed: $runExitCode")
+//    }
+//
+//    val buildExitCode = launchProcess(
+//        args = arrayOf(
+//            bun.pathString,
+//            "build",
+//            (dir / "api" / "src" / "index.ts").pathString,
+//            "--outdir",
+//            distDir.pathString,
+//            "--minify"
+//        ),
+//        config = Standalone
+//    )
+//    if (buildExitCode != 0) {
+//        error("Build failed: $buildExitCode")
+//    }
 }

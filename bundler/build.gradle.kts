@@ -1,5 +1,3 @@
-import fe.build.dependencies.Grrfe
-
 plugins {
     kotlin("multiplatform")
 }
@@ -18,15 +16,15 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(Square.okio)
-            implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.6.0")
-            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0-RC")
+            implementation("org.jetbrains.kotlinx:kotlinx-io-core:_")
+            implementation(KotlinX.coroutines.core)
+            implementation(KotlinX.serialization.json)
         }
 
         commonTest.dependencies {
             implementation(kotlin("test"))
-            implementation("com.willowtreeapps.assertk:assertk:0.28.1")
-            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.1")
+            implementation("com.willowtreeapps.assertk:assertk:_")
+            implementation(KotlinX.coroutines.test)
         }
 
         jsMain.dependencies {
@@ -34,38 +32,14 @@ kotlin {
             implementation(kotlinWrappers.node)
 
             implementation(npm("typescript", "^5.0.0"))
-            implementation("com.squareup.okio:okio-nodefilesystem:3.10.2")
-//            implementation(Grrfe.std.io.kotlinx.core)
-//            println(Grrfe.std.io.kotlinx.core)
+            implementation("com.squareup.okio:okio-nodefilesystem:_")
         }
 
-//        val jsMain by getting {
-//            dependencies {
-//
-//            }
-//        }
-
         jvmMain.dependencies {
-            implementation(Grrfe.std.process.jvm)
-            implementation("app.cash.zipline:zipline-jvm:1.17.0")
+            implementation("app.cash.zipline:zipline-jvm:_")
         }
 
         jvmTest.dependencies {
         }
     }
 }
-
-//application {
-//    mainClass.set("fe.libredirectkt.MainKt")
-//}
-//
-//tasks.getByName<Jar>("jar") {
-//    manifest {
-//        attributes["Main-Class"] = application.mainClass.get()
-//    }
-//
-//    excludes += setOf("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
-//
-//    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
-//    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-//}
