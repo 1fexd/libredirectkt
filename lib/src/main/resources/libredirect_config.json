@@ -476,12 +476,17 @@
         "liteXiv": {
           "name": "LiteXiv",
           "instanceList": true,
-          "url": "https://codeberg.org/Peaksol/LiteXiv"
+          "url": "https://codeberg.org/LiteXiv/LiteXiv"
         },
         "vixipy": {
           "name": "Vixipy",
           "instanceList": true,
           "url": "https://codeberg.org/vixipy/Vixipy"
+        },
+        "pixivViewer": {
+          "name": "Pixiv Viewer",
+          "instanceList": true,
+          "url": "https://github.com/asadahimeka/pixiv-viewer"
         }
       },
       "targets": [
@@ -562,7 +567,7 @@
       },
       "targets": [
         "^https?:\\/{2}i\\.pinimg\\.com",
-        "^https?:\\/{2}(www\\.)?pinterest\\.com"
+        "^https?:\\/{2}((?!api\\.)[a-zA-Z]+\\.)?pinterest\\.com"
       ],
       "options": {
         "enabled": false,
@@ -693,6 +698,11 @@
           "name": "Small",
           "instanceList": true,
           "url": "https://git.private.coffee/PrivateCoffee/small"
+        },
+        "freedium": {
+          "name": "Freedium",
+          "instanceList": true,
+          "url": "https://codeberg.org/Freedium-cfd"
         }
       },
       "targets": [
@@ -930,7 +940,7 @@
         "ruralDictionary": {
           "name": "Rural Dictionary",
           "instanceList": true,
-          "url": "https://codeberg.org/zortazert/rural-dictionary"
+          "url": "https://codeberg.org/cobra/rural-dict"
         }
       },
       "targets": [
@@ -1138,6 +1148,15 @@
             2,
             3
           ]
+        },
+        "websurfx": {
+          "name": "Websurfx",
+          "instanceList": true,
+          "url": "https://github.com/neon-mmd/websurfx",
+          "excludeTargets": [
+            2,
+            3
+          ]
         }
       },
       "targets": [
@@ -1298,6 +1317,25 @@
       },
       "imageType": "svgMono",
       "url": "https://paste.libredirect.invalid"
+    },
+    "office": {
+       "frontends": {
+        "cryptPad": {
+          "name": "CryptPad",
+          "instanceList": true,
+          "url": "https://cryptpad.org"
+        }
+      },
+      "targets": ["^https?:\\/{2}office\\.libredirect\\.invalid"],
+      "name": "Office",
+      "options": {
+        "enabled": false,
+        "unsupportedUrls": "bypass",
+        "frontend": "cryptPad",
+        "redirectOnlyInIncognito": false
+      },
+      "imageType": "svgMono",
+      "url": "https://office.libredirect.invalid"
     },
     "ultimateGuitar": {
       "frontends": {

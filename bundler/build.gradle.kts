@@ -11,6 +11,23 @@ kotlin {
     }
 
     jvm {
+        mainRun {
+            mainClass.set("fe.libredirectkt.MainKt")
+        }
+
+        this.binaries {
+            this.executable {
+                mainClass.set("fe.libredirectkt.MainKt")
+
+//    manifest {
+//        attributes["Main-Class"] = application.mainClass.get()
+//    }
+//                excludes += setOf("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
+//
+//    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+//    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+            }
+        }
     }
 
     sourceSets {
