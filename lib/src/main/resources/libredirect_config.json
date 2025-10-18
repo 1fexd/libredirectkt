@@ -137,7 +137,7 @@
         "^https?:\\/{2}(www\\.|m\\.)?youtube.com(\\/|$)(?!iframe_api\\/|redirect\\/)",
         "^https?:\\/{2}img\\.youtube.com\\/vi\\/.*\\/..*",
         "^https?:\\/{2}(i|s)\\.ytimg.com\\/vi\\/.*\\/..*",
-        "^https?:\\/{2}(www\\.)?youtube.com\\/watch?v=..*",
+        "^https?:\\/{2}(www\\.)?youtube.com\\/watch?v\u003d..*",
         "^https?:\\/{2}(www\\.)?youtu\\.be\\/..*",
         "^https?:\\/{2}(www\\.)?(youtube|youtube-nocookie)\\.com\\/embed\\/..*"
       ],
@@ -156,6 +156,12 @@
     },
     "youtubeMusic": {
       "frontends": {
+        "ytifyMusic": {
+          "name": "ytify",
+          "embeddable": false,
+          "instanceList": true,
+          "url": "https://github.com/n-ce/ytify/"
+        },
         "hyperpipe": {
           "name": "Hyperpipe",
           "instanceList": true,
@@ -227,7 +233,9 @@
           "url": "https://duckduckgo.com/duckduckgo-help-pages/aichat/"
         }
       },
-      "targets": ["^https?:\\/{2}chatgpt\\.com"],
+      "targets": [
+        "^https?:\\/{2}chatgpt\\.com"
+      ],
       "name": "ChatGPT",
       "options": {
         "enabled": false,
@@ -293,7 +301,7 @@
         }
       },
       "targets": [
-        "^https?:\\/{2}(www\\.|old\\.|np\\.|new\\.|amp\\.)?(reddit|reddittorjg6rue252oqsxryoxengawnmo46qy4kyii5wtqnwfj4ooad)\\.(com|onion)(?=\\/u(ser)?\\/|\\/r\\/|\\/search|\\/new|\\/comments|\\/?$)",
+        "^https?:\\/{2}(www\\.|old\\.|np\\.|new\\.|amp\\.)?(reddit|reddittorjg6rue252oqsxryoxengawnmo46qy4kyii5wtqnwfj4ooad)\\.(com|onion)(?\u003d\\/u(ser)?\\/|\\/r\\/|\\/search|\\/new|\\/comments|\\/?$)",
         "^https?:\\/{2}((i|(external-)?preview)\\.)?redd\\.it"
       ],
       "name": "Reddit",
@@ -510,7 +518,7 @@
         }
       },
       "targets": [
-        "^https?:\\/{2}([a-zA-Z0-9-]+\\.)?(fandom|wikia)\\.com(?=\\/wiki|\\/?$)"
+        "^https?:\\/{2}([a-zA-Z0-9-]+\\.)?(fandom|wikia)\\.com(?\u003d\\/wiki|\\/?$)"
       ],
       "name": "Fandom",
       "options": {
@@ -1319,14 +1327,16 @@
       "url": "https://paste.libredirect.invalid"
     },
     "office": {
-       "frontends": {
+      "frontends": {
         "cryptPad": {
           "name": "CryptPad",
           "instanceList": true,
           "url": "https://cryptpad.org"
         }
       },
-      "targets": ["^https?:\\/{2}office\\.libredirect\\.invalid"],
+      "targets": [
+        "^https?:\\/{2}office\\.libredirect\\.invalid"
+      ],
       "name": "Office",
       "options": {
         "enabled": false,
@@ -1393,7 +1403,7 @@
         }
       },
       "targets": [
-        "^https?:\\/{2}(www\\.)?threads\\.net"
+        "^https?:\\/{2}(www\\.)?threads\\.(net|com)"
       ],
       "name": "Threads",
       "options": {
