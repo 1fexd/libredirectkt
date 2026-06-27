@@ -32,7 +32,9 @@ dependencies {
 
 
 val generatedSrcDir: File = layout.buildDirectory.dir("generated/sources/metadata/main/java").get().asFile
-generatedSrcDir.mkdirs()
+afterEvaluate {
+    generatedSrcDir.mkdirs()
+}
 
 val main by sourceSets
 main.java.srcDir(generatedSrcDir)
@@ -45,7 +47,6 @@ val generateMetadata = tasks.register<MetadataGeneratorTask>("generateMetadata")
 
 val assemble by tasks
 assemble.dependsOn(generateMetadata)
-
 
 val libRedirectDir = rootProject.layout.projectDirectory.dir("libredirect")
 val resourcesDir = project.file("src/main/resources")
@@ -70,7 +71,8 @@ val extractCode = tasks.register<LibRedirectCodeExtractor>("extractCode") {
     description = "Extract LibRedirect code from browser extension"
     group = "build"
     dependsOn(":bundler:jsProductionExecutableCompileSync")
-    val bundlerJs = findProject(":bundler")?.layout?.buildDirectory?.file("compileSync/js/main/productionExecutable/kotlin/libredirect-bundler.js")
+    val bundlerJs =
+        findProject(":bundler")?.layout?.buildDirectory?.file("compileSync/js/main/productionExecutable/kotlin/libredirect-bundler.js")
     bundlerJsPath.set(bundlerJs!!.get().asFile)
     outputDir.set(libRedirectDir)
 }
