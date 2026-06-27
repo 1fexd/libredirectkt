@@ -32,13 +32,11 @@ dependencies {
 
 
 val generatedSrcDir: File = layout.buildDirectory.dir("generated/sources/metadata/main/java").get().asFile
-afterEvaluate {
-    generatedSrcDir.mkdirs()
-}
 
 val main by sourceSets
 main.java.srcDir(generatedSrcDir)
 
+val compileJava by tasks
 val generateMetadata = tasks.register<MetadataGeneratorTask>("generateMetadata") {
     description = "Generate build metadata"
     group = "build"

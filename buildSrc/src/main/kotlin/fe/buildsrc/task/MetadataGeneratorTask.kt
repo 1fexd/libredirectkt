@@ -10,15 +10,17 @@ import org.gradle.api.tasks.TaskAction
 import java.io.File
 
 abstract class MetadataGeneratorTask : DefaultTask() {
-    @get:InputDirectory
-    abstract val dir: DirectoryProperty
+    // Intentionally kept as Property<File>, as DirectoryProperty would require dir to be available before task, which it isn't,
+    // if build dir does not exist yet (i.e. on first build in CI)
+    @get:Input
+    abstract val dir: Property<File>
 
     @TaskAction
     fun generate() {
         val hash = getInstancesHash()
         val javaFile = MetadataClassGenerator.build(System.currentTimeMillis(), hash)
 
-        val dir = dir.get().asFile
+        val dir = dir.get()
         dir.mkdirs()
 
         File(dir, "${javaFile.typeSpec.name}.java").delete()
