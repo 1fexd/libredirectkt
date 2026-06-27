@@ -3,10 +3,10 @@ import { rewrite } from "./generated/services"
 
 function resolve(url: string, frontend: string, instance: string): string | undefined {
     const urlInstance = new URL(url);
-    return rewrite(urlInstance, urlInstance, frontend, instance);
+    const type = "";
+    return rewrite(urlInstance, null, frontend, instance, type);
 }
 
-// @ts-expect-error
 define(() => ({
     resolve: resolve
 }))

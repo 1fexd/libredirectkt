@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-pushd update || exit
-./fetch_latest_libredirect.sh
-popd || exit
+# Update config, instances and build metadata via Gradle tasks in buildSrc
+./gradlew -p lib updateAll
+# Build code extractor
+./gradlew -p bundler jsProductionExecutableCompileSync
+# Run bundler, extracts code, builds extracted code with stubs, compiles zipline
 ./gradlew -p bundler jvmRun --args="$(pwd)"

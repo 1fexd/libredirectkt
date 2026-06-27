@@ -1,6 +1,7 @@
 package fe.libredirect
 
 import kotlinx.serialization.json.Json
+import node.process.Process
 import node.process.process
 import okio.FileSystem
 import okio.NodeJsFileSystem
@@ -42,16 +43,32 @@ fun run(fileSystem: FileSystem, inputFile: String, outputDir: okio.Path) {
         it.writeUtf8(encoded)
     }
 }
+fun process(): Process {
+    return js("require('process')").unsafeCast<Process>()
+}
 
-fun main() {
-    val currentDir = process.cwd()
+fun main(args: Array<String>) {
+    val fileSystem = NodeJsFileSystem
+//    val currentDir = process().cwd()
+//    val baseDir = process().argv.getOrNull(2)?.toPath()
+//    val baseDir = args.getOrNull(2)?.toPath()
+    val baseDir = args.firstOrNull()?.toPath()
+    if(baseDir == null) {
+        println("First argument must be path to libredirect dir!")
+        return
+    }
+//    fileSystem.exists()
+
     // {project-root}/build/js/packages/libredirect-bundler
-    println("Current directory: $currentDir")
+//    println("Current directory: $currentDir")
 
     // {project-root}/libredirect
-    val baseDir = currentDir.toPath().parent?.parent?.parent?.parent?.resolve("libredirect")
+//    val baseDir = currentDir.toPath().parent?.parent?.parent?.parent?.resolve("libredirect")
+    val inputFile = "$baseDir/browser_extension/src/assets/javascripts/services.js"
+    val outputDir = "$baseDir/api/src/generated".toPath()
     println("Base directory: $baseDir")
+    println("Input file: $inputFile")
+    println("Output directory: $outputDir")
 
-    val fileSystem = NodeJsFileSystem
-    run(fileSystem, "$baseDir/browser_extension/src/assets/javascripts/services.js", "$baseDir/api/src/generated".toPath())
+    run(fileSystem, inputFile, outputDir)
 }

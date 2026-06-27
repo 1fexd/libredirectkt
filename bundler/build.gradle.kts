@@ -1,12 +1,22 @@
+@file:OptIn(ExperimentalMainFunctionArgumentsDsl::class)
+
+import fe.build.dependencies.Grrfe
+import fe.build.dependencies.external.Ajalt
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalMainFunctionArgumentsDsl
+
 plugins {
     kotlin("multiplatform")
 }
 
 kotlin {
-    js(IR) {
+    js {
         // https://github.com/Kotlin/kotlinx-io/issues/345
         useCommonJs()
-        nodejs {}
+        nodejs {
+            runTask {
+            }
+            this.passCliArgumentsToMainFunction()
+        }
         binaries.executable()
     }
 
@@ -54,6 +64,19 @@ kotlin {
 
         jvmMain.dependencies {
             implementation("app.cash.zipline:zipline-jvm:_")
+            implementation(Ktor.client.core)
+            implementation(Ktor.client.cio)
+            implementation("io.ktor:ktor-client-cio-jvm:_")
+            implementation(Ktor.client.okHttp)
+            implementation(Ktor.client.contentNegotiation)
+            implementation(Ktor.plugins.serialization.kotlinx.json)
+            implementation(Grrfe.std.core.withVersion("0.0.159"))
+            implementation(Grrfe.std.process.core.withVersion("0.0.159"))
+            implementation(Grrfe.std.process.jvm.withVersion("0.0.159"))
+            implementation(Ajalt.clikt.core)
+            implementation(Ajalt.clikt.markdown)
+            implementation(Ajalt.mordant.core)
+            implementation(Ajalt.mordant.coroutines)
         }
 
         jvmTest.dependencies {

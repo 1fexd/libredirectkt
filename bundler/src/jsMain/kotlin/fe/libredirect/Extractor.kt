@@ -31,7 +31,7 @@ fun updateNode(node: Node, requiredName: String, sourceFile: SourceFile): Statem
     return when {
         isFunctionDeclaration(node) -> {
             when {
-                node.name?.text !== requiredName -> null
+                node.name?.text != requiredName -> null
                 else -> factory.updateFunctionDeclaration(
                     node,
                     arrayOf(factory.createToken(SyntaxKind.ExportKeyword).unsafeCast<ModifierLike>()),
@@ -43,7 +43,7 @@ fun updateNode(node: Node, requiredName: String, sourceFile: SourceFile): Statem
 
         isVariableStatement(node) -> {
             when {
-                node.declarationList.declarations.asArray()[0].name.getText(sourceFile) !== requiredName -> null
+                node.declarationList.declarations.asArray()[0].name.getText(sourceFile) != requiredName -> null
                 else -> factory.updateVariableStatement(
                     node,
                     arrayOf(factory.createToken(SyntaxKind.ExportKeyword).unsafeCast<ModifierLike>()),
@@ -62,8 +62,7 @@ fun extractNodes(sourceFile: SourceFile, extractNodes: Map<String, SyntaxKind>):
         for ((name, kind) in extractNodes) {
             if (node.kind != kind) continue
 
-            val newNode = updateNode(node, name, sourceFile)
-            if (newNode == null) continue
+            val newNode = updateNode(node, name, sourceFile) ?: continue
 
             nodes.add(newNode)
         }

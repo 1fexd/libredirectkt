@@ -1,17 +1,10 @@
-import com.gitlab.grrfe.gradlebuild.common.extension.isPlatform
-import com.gitlab.grrfe.gradlebuild.common.extension.isTesting
-import com.gitlab.grrfe.gradlebuild.library.publishing.PublicationComponent2
-import com.gitlab.grrfe.gradlebuild.library.publishing.PublicationName2
-import fe.buildlogic.Plugins
-import fe.buildlogic.Version
-import fe.buildlogic.applyPlugin
-import fe.buildlogic.common.CompilerOption
-import fe.buildlogic.common.extension.addCompilerOptions
+import com.gitlab.grrfe.gradlebuild.*
+import com.gitlab.grrfe.gradlebuild.extension.isPlatform
+import com.gitlab.grrfe.gradlebuild.extension.isTesting
+import fe.build.dependencies.Grrfe
 
 plugins {
     kotlin("jvm")
-    id("net.nemerosa.versioning") apply false
-    id("com.gitlab.grrfe.new-build-logic-plugin")
     id("com.gitlab.grrfe.library-build-plugin")
 }
 
@@ -28,33 +21,27 @@ subprojects {
 
     applyPlugin(
         Plugins.MavenPublish,
-        Plugins.GrrfeNewBuildLogic,
         Plugins.GrrfeLibraryBuild,
-        Plugins.NemerosaVersioning
     )
 
     group = baseGroup
-    library {
-        if (!isTesting && isJvm) {
-            publication {
-                name.set(PublicationName2.Maven)
-                component.set(if (isPlatform) PublicationComponent2.JavaPlatform else PublicationComponent2.Java)
-            }
-        }
-    }
-
     if (!isPlatform && isJvm) {
         kotlin {
             jvmToolchain(Version.JVM)
             if (!isTesting) {
                 explicitApi()
             }
-            addCompilerOptions(CompilerOption.WhenGuards)
         }
 
         java {
             withJavadocJar()
             withSourcesJar()
+        }
+    }
+
+    dependencies {
+        configurations.findByName("implementation")?.let { implementation ->
+            implementation(platform(Grrfe.std.bom))
         }
     }
 }
