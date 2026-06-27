@@ -43,6 +43,7 @@ fun run(fileSystem: FileSystem, inputFile: String, outputDir: okio.Path) {
         it.writeUtf8(encoded)
     }
 }
+
 fun process(): Process {
     return js("require('process')").unsafeCast<Process>()
 }
@@ -53,7 +54,7 @@ fun main(args: Array<String>) {
 //    val baseDir = process().argv.getOrNull(2)?.toPath()
 //    val baseDir = args.getOrNull(2)?.toPath()
     val baseDir = args.firstOrNull()?.toPath()
-    if(baseDir == null) {
+    if (baseDir == null) {
         println("First argument must be path to libredirect dir!")
         return
     }
@@ -66,6 +67,7 @@ fun main(args: Array<String>) {
 //    val baseDir = currentDir.toPath().parent?.parent?.parent?.parent?.resolve("libredirect")
     val inputFile = "$baseDir/browser_extension/src/assets/javascripts/services.js"
     val outputDir = "$baseDir/api/src/generated".toPath()
+    fileSystem.createDirectories(outputDir)
     println("Base directory: $baseDir")
     println("Input file: $inputFile")
     println("Output directory: $outputDir")
