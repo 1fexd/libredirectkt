@@ -58,7 +58,7 @@ dependencyResolutionManagement.versionCatalogs.create("kotlinWrappers") {
 }
 
 include(":lib")
-include(":bundler")
+include(":extractor")
 
 buildSettings {
     substitutes {

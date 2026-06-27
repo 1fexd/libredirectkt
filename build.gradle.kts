@@ -9,7 +9,7 @@ plugins {
 }
 
 val baseGroup = "com.github.1fexd.libredirectkt"
-val multiplatformProjects = arrayOf("bundler")
+val multiplatformProjects = arrayOf("extractor")
 
 subprojects {
     val isJvm = !multiplatformProjects.any { name.startsWith(it) }

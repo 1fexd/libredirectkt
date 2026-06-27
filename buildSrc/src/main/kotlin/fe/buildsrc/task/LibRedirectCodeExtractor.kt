@@ -17,7 +17,7 @@ abstract class LibRedirectCodeExtractor @Inject constructor(
     private val execOperations: ExecOperations
 ) : AbstractExecTask<LibRedirectCodeExtractor>(LibRedirectCodeExtractor::class.java) {
     @get:InputFile
-    abstract val bundlerJsPath: Property<File>
+    abstract val extractorJsPath: Property<File>
 
     @get:OutputDirectory
     abstract val outputDir: DirectoryProperty
@@ -25,7 +25,7 @@ abstract class LibRedirectCodeExtractor @Inject constructor(
     @TaskAction
     fun extract() {
         executable = BunLocator().bunPath(execOperations)?.pathString ?: error("Bun not found")
-        args = listOf(bundlerJsPath.get().toString(), outputDir.get().toString())
+        args = listOf(extractorJsPath.get().toString(), outputDir.get().toString())
         super.exec()
     }
 }

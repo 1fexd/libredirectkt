@@ -2,6 +2,6 @@
 # Update config, instances and build metadata via Gradle tasks in buildSrc
 ./gradlew -p lib updateAll
 # Build code extractor
-./gradlew -p bundler jsProductionExecutableCompileSync
-# Run bundler, extracts code, builds extracted code with stubs, compiles zipline
-./gradlew -p bundler jvmRun --args="$(pwd)"
+./gradlew -p extractor jsProductionExecutableCompileSync
+# Run extractor, extracts code, builds extracted code with stubs, compiles zipline
+./gradlew -p extractor jvmRun --args="$(pwd)"

@@ -68,10 +68,10 @@ val updateAll = tasks.register("updateAll") {
 val extractCode = tasks.register<LibRedirectCodeExtractor>("extractCode") {
     description = "Extract LibRedirect code from browser extension"
     group = "build"
-    dependsOn(":bundler:jsProductionExecutableCompileSync")
-    val bundlerJs =
-        findProject(":bundler")?.layout?.buildDirectory?.file("compileSync/js/main/productionExecutable/kotlin/libredirect-bundler.js")
-    bundlerJsPath.set(bundlerJs!!.get().asFile)
+    dependsOn(":extractor:jsProductionExecutableCompileSync")
+    val extractorJs =
+        findProject(":extractor")?.layout?.buildDirectory?.file("compileSync/js/main/productionExecutable/kotlin/libredirect-extractor.js")
+    extractorJsPath.set(extractorJs!!.get().asFile)
     outputDir.set(libRedirectDir)
 }
 val buildCode = tasks.register<LibRedirectCodeBuilder>("buildCode") {

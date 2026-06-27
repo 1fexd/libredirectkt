@@ -60,7 +60,7 @@ fun main(args: Array<String>) {
     }
 //    fileSystem.exists()
 
-    // {project-root}/build/js/packages/libredirect-bundler
+    // {project-root}/build/js/packages/libredirect-extractor
 //    println("Current directory: $currentDir")
 
     // {project-root}/libredirect
