@@ -1,6 +1,7 @@
 package fe.buildsrc.task
 
 import fe.buildsrc.BunLocator
+import org.gradle.api.DefaultTask
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property
@@ -17,7 +18,9 @@ import kotlin.io.path.pathString
 
 abstract class LibRedirectCodeBuilder @Inject constructor(
     private val execOperations: ExecOperations
-): AbstractExecTask<LibRedirectCodeBuilder>(LibRedirectCodeBuilder::class.java) {
+): DefaultTask() {
+    @get:InputDirectory
+    abstract val apiInputDir: DirectoryProperty
     @get:InputFile
     abstract val inputFilePath: Property<File>
 
@@ -26,14 +29,20 @@ abstract class LibRedirectCodeBuilder @Inject constructor(
 
     @TaskAction
     fun extract() {
-        executable = BunLocator().bunPath(execOperations)?.pathString ?: error("Bun not found")
-        args = listOf(
-            "build",
-            inputFilePath.get().toString(),
-            "--outdir",
-            outputDir.get().toString(),
-            "--minify"
-        )
-        super.exec()
+        val bunPath = BunLocator().bunPath(execOperations)?.pathString ?: error("Bun not found")
+        execOperations.exec {
+            executable = bunPath
+            args = listOf("install", "--cwd", apiInputDir.get().toString())
+        }
+        execOperations.exec {
+            executable = bunPath
+            args = listOf(
+                "build",
+                inputFilePath.get().toString(),
+                "--outdir",
+                outputDir.get().toString(),
+                "--minify"
+            )
+        }
     }
 }

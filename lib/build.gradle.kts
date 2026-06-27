@@ -74,11 +74,13 @@ val extractCode = tasks.register<LibRedirectCodeExtractor>("extractCode") {
     extractorJsPath.set(extractorJs!!.get().asFile)
     outputDir.set(libRedirectDir)
 }
+val apiDir = libRedirectDir.dir("api")
 val buildCode = tasks.register<LibRedirectCodeBuilder>("buildCode") {
     description = "Build extracted LibRedirect code with stubs"
     group = "build"
     dependsOn(extractCode)
-    inputFilePath.set(libRedirectDir.file("api/src/index.ts").asFile)
+    apiInputDir.set(apiDir)
+    inputFilePath.set(apiDir.file("src/index.ts").asFile)
     outputDir.set(libRedirectDir.dir("dist"))
 }
 val compileZipline = tasks.register<ZiplineCompileTask>("compileZipline") {
