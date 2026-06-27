@@ -39,7 +39,7 @@ class ZiplineTest {
         )
 
         assertEquals(
-            "https://inv.nadeko.net/watch?v=V3zLnSGVdmE", libRedirectZipline.redirect(
+            "https://inv.nadeko.net/watch?v=V3zLnSGVdmE&", libRedirectZipline.redirect(
                 "https://youtu.be/V3zLnSGVdmE",
                 ytService.defaultFrontend.key,
                 LibRedirect.getDefaultInstanceForFrontend(ytService.defaultFrontend.key, instances)!!

@@ -21,6 +21,7 @@ plugins {
 configureRepositories(
     MavenRepository.MavenCentral,
     MavenRepository.Jitpack,
+    MavenRepository.Google,
     GradlePluginPortalRepository,
     mode = RepositoriesMode.PREFER_SETTINGS
 )

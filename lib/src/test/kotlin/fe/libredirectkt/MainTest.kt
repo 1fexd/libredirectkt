@@ -14,14 +14,14 @@ class MainTest {
         assertNotNull(instagramService)
         assertNotNull(instagramService.defaultFrontend)
         assertEquals("instagram", instagramService.key)
-        assertEquals("proxigram", instagramService.defaultFrontend.key)
+        assertEquals("kittygram", instagramService.defaultFrontend.key)
         assertEquals(
-            "https://ig.opnxng.com",
+            "https://kittygr.am",
             LibRedirect.getDefaultInstanceForFrontend(instagramService.defaultFrontend.key, instances)
         )
 
         assertEquals(
-            "https://ig.opnxng.com/p/DAtQDJFPtfi", LibRedirect.redirect(
+            "https://kittygr.am/p/DAtQDJFPtfi", LibRedirect.redirect(
                 "https://www.instagram.com/p/DAtQDJFPtfi",
                 instagramService.defaultFrontend.key,
                 LibRedirect.getDefaultInstanceForFrontend(instagramService.defaultFrontend.key, instances)!!
