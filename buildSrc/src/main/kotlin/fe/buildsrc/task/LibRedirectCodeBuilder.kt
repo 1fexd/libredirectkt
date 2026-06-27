@@ -13,6 +13,7 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecOperations
 import java.io.File
 import javax.inject.Inject
+import kotlin.io.path.pathString
 
 abstract class LibRedirectCodeBuilder @Inject constructor(
     private val execOperations: ExecOperations
@@ -25,7 +26,7 @@ abstract class LibRedirectCodeBuilder @Inject constructor(
 
     @TaskAction
     fun extract() {
-        executable = BunLocator.bunPath(execOperations) ?: error("Bun not found")
+        executable = BunLocator().bunPath(execOperations)?.pathString ?: error("Bun not found")
         args = listOf(
             "build",
             inputFilePath.get().toString(),
