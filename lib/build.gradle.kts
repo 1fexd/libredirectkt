@@ -32,6 +32,7 @@ dependencies {
 
 
 val generatedSrcDir: File = layout.buildDirectory.dir("generated/sources/metadata/main/java").get().asFile
+generatedSrcDir.mkdirs()
 
 val main by sourceSets
 main.java.srcDir(generatedSrcDir)
